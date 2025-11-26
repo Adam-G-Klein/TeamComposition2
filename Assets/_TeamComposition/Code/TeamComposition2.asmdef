@@ -1,0 +1,22 @@
+{
+    "name": "TeamComposition2",
+    "references": [
+        "UnboundLib",
+        "ModdingUtils"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "0Harmony.dll",
+        "Assembly-CSharp.dll",
+        "BepInEx.dll",
+        "PhotonUnityNetworking.dll",
+        "CosmicRounds.dll",
+        "0Harmony20.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": []
+}

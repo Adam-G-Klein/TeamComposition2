@@ -1,0 +1,22 @@
+{
+  "name": "CR",
+  "version_number": "2.7.0",
+  "website_url": "",
+  "description": "Adds new 100 cards to the game!",
+  "dependencies": [
+    "willis81808-UnboundLib-3.2.13",
+    "BepInEx-BepInExPack_ROUNDS-5.4.1901",
+    "Pykess-CardChoiceSpawnUniqueCardPatch-0.1.10",
+    "willuwontu-WillsWackyMapObjects-1.2.4",
+    "Pykess-ModdingUtils-0.4.8",
+    "RoundsModding-Performance_Improvements-0.2.0",
+    "Root-RarityLib-1.2.8",
+    "Root-CardThemeLib-1.1.7",
+    "Root-Classes_Manager_Reborn-1.5.4",
+    "Root-GravityPatch-0.0.0",
+    "TeamDK-ZeroGBulletPatch-1.1.0",
+    "BossSloth-CardBarPatch-2.1.1",
+    "willis81808-ModsPlus-1.6.2",
+    "willuwontu-StopShootingYoureDead-0.0.0"
+  ]
+}
