@@ -14,8 +14,7 @@
         "Assembly-CSharp.dll",
         "BepInEx.dll",
         "PhotonUnityNetworking.dll",
-        "CosmicRounds.dll",
-        "0Harmony20.dll"
+        "SonigonAudioEngine.Runtime.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": []
