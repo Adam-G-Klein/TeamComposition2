@@ -9,6 +9,7 @@ using UnityEngine;
 [BepInDependency("com.willis.rounds.unbound")]
 [BepInDependency("pykess.rounds.plugins.moddingutils")]
 [BepInDependency("pykess.rounds.plugins.cardchoicespawnuniquecardpatch")]
+[BepInDependency("pykess.rounds.plugins.mapembiggener")]
 [BepInPlugin("com.adamklein.teamcomposition", "TeamComposition2", "0.0.0")]
 [BepInProcess("Rounds.exe")]
 public class MyPlugin: BaseUnityPlugin{
