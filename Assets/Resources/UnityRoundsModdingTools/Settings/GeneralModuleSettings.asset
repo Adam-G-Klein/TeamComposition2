@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fba077109abcc95469869b97fd47580d, type: 3}
+  m_Name: GeneralModuleSettings
+  m_EditorClassIdentifier: 
+  ModBundleMappings: []
+  FolderMappings:
+  - AssemblyName: URMT.Core
+    FolderName: URMT
+  - AssemblyName: URMT.ModManager
+    FolderName: URMT
+  - AssemblyName: URMT.Networking
+    FolderName: URMT
+  - AssemblyName: URMT.Export
+    FolderName: URMT
+  - AssemblyName: URMT.Template
+    FolderName: URMT
+  - AssemblyName: URMT.Utility
+    FolderName: URMT
+  - AssemblyName: URMT.Thunderstore
+    FolderName: URMT
+  - AssemblyName: URMT.General
+    FolderName: URMT
+  - AssemblyName: ThunderstoreAPI
+    FolderName: URMT Wrappers
+  - AssemblyName: GitHubAPI
+    FolderName: URMT Wrappers
+  - AssemblyName: CardChoiceSpawnUniqueCardPatch
+    FolderName: Libraries
+  - AssemblyName: CardThemeLib
+    FolderName: Libraries
+  - AssemblyName: ClassesManagerReborn
+    FolderName: Libraries
+  - AssemblyName: ItemShops
+    FolderName: Libraries
+  - AssemblyName: ModdingUtils
+    FolderName: Libraries
+  - AssemblyName: ModsPlus
+    FolderName: Libraries
+  - AssemblyName: PickNCards
+    FolderName: Libraries
+  - AssemblyName: RarityLib
+    FolderName: Libraries
+  - AssemblyName: RoundsWithFriends
+    FolderName: Libraries
+  - AssemblyName: UnboundLib
+    FolderName: Libraries
+  - AssemblyName: WillsWackyManagers
+    FolderName: Libraries
+  - AssemblyName: ILGenerator
+    FolderName: Libraries

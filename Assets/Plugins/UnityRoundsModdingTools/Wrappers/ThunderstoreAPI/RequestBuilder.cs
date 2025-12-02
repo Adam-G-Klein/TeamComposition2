@@ -1,0 +1,71 @@
+﻿using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
+
+namespace ThunderstoreAPI {
+    public class RequestBuilder {
+        private UriBuilder uriBuilder = new UriBuilder() {
+            Scheme = "https"
+        };
+
+        public HttpMethod Method = HttpMethod.Get;
+        public AuthenticationHeaderValue Authorization;
+        public HttpContent Content;
+        public string Host { get; private set; }
+        public RequestBuilder(string host) {
+            uriBuilder.Host = host.StartsWith("https://")
+                ? host.Substring(8)
+                : host;
+
+            Host = host;
+        }
+
+        public RequestBuilder StartNew() {
+            return new RequestBuilder(Host);
+        }
+
+        public RequestBuilder WithEndpoint(string endpoint) {
+            uriBuilder.Path = endpoint.EndsWith("/")
+                ? endpoint
+                : endpoint + "/";
+
+            return this;
+        }
+
+        public RequestBuilder WithAbsoluteEndpoint(string absoluteUrl) {
+            uriBuilder = new UriBuilder(absoluteUrl);
+            return this;
+        }
+
+
+        public RequestBuilder WithAuth(AuthenticationHeaderValue authorization) {
+            Authorization = authorization;
+            return this;
+        }
+
+        public RequestBuilder WithContent(HttpContent content) {
+            Content = content;
+            return this;
+        }
+
+        public RequestBuilder WithMethod(HttpMethod method) {
+            Method = method;
+            return this;
+        }
+
+        public RequestBuilder WithContentType(string contentType) {
+            Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+            return this;
+        }
+
+        public HttpRequestMessage Build() {
+            var request = new HttpRequestMessage(Method, uriBuilder.Uri) {
+                Content = Content
+            };
+
+            request.Headers.Authorization = Authorization;
+
+            return request;
+        }
+    }
+}

@@ -1,0 +1,21 @@
+{
+    "name": "URMT.Template",
+    "references": [
+        "URMT.Core",
+        "URMT.General",
+        "GitHubAPI"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "Newtonsoft.Json.dll",
+        "BepInEx.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": []
+}
