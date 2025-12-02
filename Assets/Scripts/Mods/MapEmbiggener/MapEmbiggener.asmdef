@@ -1,0 +1,24 @@
+{
+  "allowUnsafeCode": true,
+  "overrideReferences": true,
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "references": [
+    "BepInEx.Harmony",
+    "UnboundLib",
+    "Unity.TextMeshPro"
+  ],
+  "optionalUnityReferences": [],
+  "precompiledReferences": [
+    "0Harmony.dll",
+    "Assembly-CSharp.dll",
+    "BepInEx.dll",
+    "MMHOOK_Assembly-CSharp.dll",
+    "Photon3Unity3D.dll",
+    "PhotonRealtime.dll",
+    "PhotonUnityNetworking.dll"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "name": "MapEmbiggener"
+}
