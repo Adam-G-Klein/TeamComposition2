@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3464649918
+CRC: 3453702141
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: e8c25155c61eb887cd1bb6be6e2d3eef
+    Hash: 113605b12376d8350e2c6be0afccaf27
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2ede4439dc612e223c08d1740f8a41ed
@@ -595,6 +595,7 @@ Assets:
 - Assets/_TeamComposition/Assets/CRAssets/Texture2D/Cancerarm2.png
 - Assets/_TeamComposition/Assets/CRAssets/Texture2D/Crowndiamond.png
 - Assets/_TeamComposition/Assets/CRAssets/Sprite/Quasaricon.asset
+- Assets/_TeamComposition/Assets/DefaultSprite.mat
 - Assets/_TeamComposition/Assets/CRAssets/AnimatorController/C_Aries.controller
 - Assets/_TeamComposition/Assets/CRAssets/Sprite/Asteroidicon.asset
 - Assets/_TeamComposition/Assets/CRAssets/Texture2D/Squidtenta1.png

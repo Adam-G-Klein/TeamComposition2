@@ -24,13 +24,6 @@ namespace UnboundLib.Patches
                 {
                     UnityEngine.Debug.LogError("No ground found?");
                 }
-                foreach (var sf in sfPoly)
-                {
-                    if (sf.GetComponent<SpriteRenderer>() != null && !sf.name.Contains("Health"))
-                    {
-                        sf.GetComponent<SpriteRenderer>().material.shader = Shader.Find("Sprites/SFSoftShadowStencil");
-                    }
-                }
             }
         }
     }
