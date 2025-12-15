@@ -17,6 +17,7 @@ namespace TeamComposition2.GameModes.Extensions
     {
         private static readonly Vector3 horizOffset = new Vector3(0f, 0f, 0f);
         private static readonly Vector3 vertOffset = new Vector3(0f, -28.835f, 0f);
+        private static readonly float clockScaleFactor = 5f;
 
         private static readonly ConditionalWeakTable<RoundCounter, RoundCounterAdditionalData> additionalData = new ConditionalWeakTable<RoundCounter, RoundCounterAdditionalData>();
         public static RoundCounterAdditionalData GetData(this RoundCounter instance)
@@ -64,9 +65,9 @@ namespace TeamComposition2.GameModes.Extensions
                 teamClock.transform.Find("Fill").GetComponent<ProceduralImage>().fillAmount = 0f;
                 teamClock.transform.Find("Fill").GetComponent<ProceduralImage>().fillMethod = UnityEngine.UI.Image.FillMethod.Radial360;
                 teamClock.gameObject.SetActive(true);
+                teamClock.transform.localPosition = GetClockPosition(teamID);
             }
-            teamClock.transform.localScale = 1 / 8f * Vector3.one;
-            teamClock.transform.localPosition = horizOffset + teamID * vertOffset;
+            teamClock.transform.localScale = clockScaleFactor * (1 / 8f * Vector3.one);
             return teamClock;
         }
         public static Transform TeamText(this RoundCounter instance, int teamID)
@@ -135,6 +136,18 @@ namespace TeamComposition2.GameModes.Extensions
             }
             instance.GetData().teamTexts.Clear();
         }
+        private static Vector3 GetClockPosition(int teamID)
+        {
+            // Place clocks along the top of the screen; adjust these anchors to taste.
+            // Index 0 is left, index 1 is right, additional teams get spaced evenly.
+            //const float topY = 175f;
+            const float topY = -40f;
+            const float horizontalSpacing = 1120f;
+            const float team1XPosition = 300f;
+
+            return new Vector3(team1XPosition + (teamID * horizontalSpacing), topY, 0f);
+        }
+
         class SizeFitter : MonoBehaviour
         {
             public void CheckForChanges()
