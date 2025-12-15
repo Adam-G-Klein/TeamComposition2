@@ -5,11 +5,14 @@ using UnboundLib;
 using UnboundLib.Cards;
 using UnboundLib.GameModes;
 using UnityEngine;
+using TeamComposition2.GameModes;
+using TeamComposition2.GameModes.Physics;
 
 [BepInDependency("com.willis.rounds.unbound")]
 [BepInDependency("pykess.rounds.plugins.moddingutils")]
 [BepInDependency("pykess.rounds.plugins.cardchoicespawnuniquecardpatch")]
 [BepInDependency("pykess.rounds.plugins.mapembiggener")]
+[BepInDependency("io.olavim.rounds.rwf")]
 [BepInPlugin("com.adamklein.teamcomposition", "TeamComposition2", "0.0.0")]
 [BepInProcess("Rounds.exe")]
 public class MyPlugin: BaseUnityPlugin{
@@ -18,11 +21,12 @@ public class MyPlugin: BaseUnityPlugin{
 	void Awake(){
 		UnityEngine.Debug.Log("here!");
 		asset = Jotunn.Utils.AssetUtils.LoadAssetBundleFromResources("teamcomposition2", typeof(MyPlugin).Assembly);
-		UnityEngine.Debug.Log("asset is null? " + asset == null ? "true" : "false");
+		UnityEngine.Debug.Log("asset is null? " + (asset == null ? "true" : "false"));
 		
 		// Register cleanup hooks
 		GameModeManager.AddHook(GameModeHooks.HookGameEnd, ResetEffects);
 		GameModeManager.AddHook(GameModeHooks.HookGameStart, ResetEffects);
+		GameModeManager.AddHook(GameModeHooks.HookPointEnd, PhysicsItemRemover.RemoveItemsOnPointEnd);
 	}
 	void Start(){
 		UnityEngine.Debug.Log("before load asset!");
@@ -30,7 +34,9 @@ public class MyPlugin: BaseUnityPlugin{
 		
 		// Register Mistletoe card
 		CustomCard.BuildCard<MistletoeCard>();
-		
+		GameModeManager.AddHandler<GM_CrownControl>(CrownControlHandler.GameModeID, new CrownControlHandler());
+		GameModeManager.AddHandler<GM_CrownControl>(TeamCrownControlHandler.GameModeID, new TeamCrownControlHandler());
+
 		UnityEngine.Debug.Log("after load asset!");
 	}
 	
