@@ -12,6 +12,7 @@ using TeamComposition2.GameModes.Physics;
 [BepInDependency("pykess.rounds.plugins.moddingutils")]
 [BepInDependency("pykess.rounds.plugins.cardchoicespawnuniquecardpatch")]
 [BepInDependency("pykess.rounds.plugins.mapembiggener")]
+[BepInDependency("io.olavim.rounds.mapsextended")]
 [BepInDependency("io.olavim.rounds.rwf")]
 [BepInPlugin("com.adamklein.teamcomposition", "TeamComposition2", "0.0.0")]
 [BepInProcess("Rounds.exe")]

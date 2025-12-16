@@ -2,20 +2,25 @@
     "name": "TeamComposition2",
     "references": [
         "UnboundLib",
-        "ModdingUtils"
+        "ModdingUtils",
+        "RoundsWithFriends",
+        "MapEmbiggener",
+        "Unity.TextMeshPro"
+    ],
+    "precompiledReferences": [
+        "0Harmony.dll",
+        "Assembly-CSharp.dll",
+        "BepInEx.dll",
+        "PhotonRealtime.dll",
+        "Photon3Unity3D.dll",
+        "PhotonUnityNetworking.dll",
+        "SonigonAudioEngine.Runtime.dll"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,
-    "precompiledReferences": [
-        "0Harmony.dll",
-        "Assembly-CSharp.dll",
-        "BepInEx.dll",
-        "PhotonUnityNetworking.dll",
-        "SonigonAudioEngine.Runtime.dll"
-    ],
     "autoReferenced": true,
     "defineConstraints": []
 }
