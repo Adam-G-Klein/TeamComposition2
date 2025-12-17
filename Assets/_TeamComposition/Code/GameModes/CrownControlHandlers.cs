@@ -4,8 +4,8 @@ namespace TeamComposition2.GameModes
 {
     public class CrownControlHandler : RWFGameModeHandler<GM_CrownControl>
     {
-        internal const string GameModeName = "Crown Control";
-        internal const string GameModeID = "Crown Control";
+        internal const string GameModeName = "Point Control";
+        internal const string GameModeID = "Point Control";
         public CrownControlHandler() : base(
             name: GameModeName,
             gameModeId: GameModeID,
@@ -16,15 +16,15 @@ namespace TeamComposition2.GameModes
             maxPlayers: null,
             maxTeams: null,
             maxClients: null,
-            description: $"Free for all. Hold the crown for {UnityEngine.Mathf.RoundToInt(GM_CrownControl.secondsNeededToWin)} seconds to win. Respawns enabled.")
+            description: $"Free for all. Control the capture point for {UnityEngine.Mathf.RoundToInt(GM_CrownControl.secondsNeededToWin)} seconds to win. Respawns enabled.")
         {
         }
     }
 
     public class TeamCrownControlHandler : RWFGameModeHandler<GM_CrownControl>
     {
-        internal const string GameModeName = "Team Crown Control";
-        internal const string GameModeID = "Team Crown Control";
+        internal const string GameModeName = "Team Point Control";
+        internal const string GameModeID = "Team Point Control";
         public TeamCrownControlHandler() : base(
             name: GameModeName,
             gameModeId: GameModeID,
@@ -35,7 +35,7 @@ namespace TeamComposition2.GameModes
             maxPlayers: null,
             maxTeams: null,
             maxClients: null,
-            description: $"Help your team hold the crown for {UnityEngine.Mathf.RoundToInt(GM_CrownControl.secondsNeededToWin)} seconds to win. Respawns enabled.")
+            description: $"Help your team hold the capture point for {UnityEngine.Mathf.RoundToInt(GM_CrownControl.secondsNeededToWin)} seconds to win. Respawns enabled.")
         {
         }
     }

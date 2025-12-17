@@ -5,6 +5,7 @@ using UnboundLib;
 using UnboundLib.Cards;
 using UnboundLib.GameModes;
 using UnityEngine;
+using TeamComposition2;
 using TeamComposition2.GameModes;
 using TeamComposition2.GameModes.Physics;
 
@@ -28,6 +29,7 @@ public class MyPlugin: BaseUnityPlugin{
 		GameModeManager.AddHook(GameModeHooks.HookGameEnd, ResetEffects);
 		GameModeManager.AddHook(GameModeHooks.HookGameStart, ResetEffects);
 		GameModeManager.AddHook(GameModeHooks.HookPointEnd, PhysicsItemRemover.RemoveItemsOnPointEnd);
+		GameModeManager.AddHook(GameModeHooks.HookPointStart, MapControlPointSpawner.EnsureControlPointExists);
 	}
 	void Start(){
 		UnityEngine.Debug.Log("before load asset!");
