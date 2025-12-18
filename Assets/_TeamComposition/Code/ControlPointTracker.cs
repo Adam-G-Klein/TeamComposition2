@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using TeamComposition2.GameModes;
 
 namespace TeamComposition2
 {
@@ -9,7 +10,7 @@ namespace TeamComposition2
     /// </summary>
     public class ControlPointTracker : MonoBehaviour
     {
-        private readonly List<Player> overlappingPlayers = new List<Player>();
+        private readonly HashSet<Player> overlappingPlayers = new HashSet<Player>();
 
         private SpriteRenderer indicatorRenderer;
 
@@ -20,6 +21,8 @@ namespace TeamComposition2
         private bool initialized;
 
         private static readonly Color neutralColor = new Color(1f, 1f, 1f, 1f);
+
+        private int controllingTeam = -1;
 
         private void Awake()
         {
@@ -42,7 +45,7 @@ namespace TeamComposition2
 
             initialized = true;
             overlappingPlayers.Clear();
-            UpdateIndicatorColor();
+            SetControllingTeam(-1);
 
             UnityEngine.Debug.Log("[TeamComposition2] ControlPointTracker initialized with indicator and trigger.");
         }
@@ -67,7 +70,6 @@ namespace TeamComposition2
             Collider2D[] results = new Collider2D[16];
             int hitCount = Physics2D.OverlapBox(center, halfExtents * 2f, 0f, filter, results);
 
-            UnityEngine.Debug.Log($"[TeamComposition2] Control point collider hit {hitCount} players.");
             for (int i = 0; i < hitCount; i++)
             {
                 Player player = results[i]?.GetComponentInParent<Player>();
@@ -78,13 +80,34 @@ namespace TeamComposition2
                 overlappingPlayers.Add(player);
             }
 
-            if (overlappingPlayers.Count == 0)
+            var teamsPresent = overlappingPlayers
+                .Select(p => p.teamID)
+                .Distinct()
+                .ToList();
+
+            if (teamsPresent.Count == 1)
             {
-                ResetColor();
+                int capturingTeam = teamsPresent[0];
+                if (capturingTeam != controllingTeam)
+                {
+                    SetControllingTeam(capturingTeam);
+                }
             }
-            else if (overlappingPlayers.Count > 0)
+            // contested or empty: maintain previous control
+        }
+
+        private void SetControllingTeam(int teamID)
+        {
+            if (controllingTeam == teamID)
             {
-                UpdateIndicatorColor();
+                return;
+            }
+
+            controllingTeam = teamID;
+            UpdateIndicatorColor();
+            if (GM_CrownControl.instance != null)
+            {
+                GM_CrownControl.instance.SetControllingTeam(teamID);
             }
         }
 
@@ -95,30 +118,21 @@ namespace TeamComposition2
                 return;
             }
 
-            if (overlappingPlayers.Count == 0)
+            if (controllingTeam == -1)
             {
-                ResetColor();
+                indicatorRenderer.color = neutralColor;
+                UpdateParticleColor(neutralColor);
+                UnityEngine.Debug.Log("[TeamComposition2] Control point set to neutral.");
                 return;
             }
 
-            Player controllingPlayer = overlappingPlayers[0];
-            Color teamColor = PlayerManager.instance.GetPlayersInTeam(controllingPlayer.teamID)
+            Color teamColor = PlayerManager.instance.GetPlayersInTeam(controllingTeam)
                 .First()
                 .GetTeamColors()
                 .color;
             indicatorRenderer.color = teamColor;
             UpdateParticleColor(teamColor);
-            UnityEngine.Debug.Log($"[TeamComposition2] Control point color set to team {controllingPlayer.teamID}.");
-        }
-
-        private void ResetColor()
-        {
-            if (indicatorRenderer != null)
-            {
-                indicatorRenderer.color = neutralColor;
-                UpdateParticleColor(neutralColor);
-                UnityEngine.Debug.Log("[TeamComposition2] Control point color reset to neutral.");
-            }
+            UnityEngine.Debug.Log($"[TeamComposition2] Control point color set to team {controllingTeam}.");
         }
 
         private void UpdateParticleColor(Color color)

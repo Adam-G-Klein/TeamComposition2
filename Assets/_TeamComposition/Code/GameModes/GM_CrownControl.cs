@@ -26,6 +26,7 @@ namespace TeamComposition2.GameModes
 
         private readonly Dictionary<int, int> deathsThisBattle = new Dictionary<int, int>();
         private Dictionary<int, float> teamHeldFor = new Dictionary<int, float>();
+        private int controllingTeam = -1;
 
         protected override void Awake()
         {
@@ -42,14 +43,18 @@ namespace TeamComposition2.GameModes
         {
             ResetDeaths();
             ResetHeldFor();
+            controllingTeam = -1;
         }
 
         private void ResetHeldFor()
         {
-            teamHeldFor.Clear();
-            foreach (int tID in PlayerManager.instance.players.Select(p => p.teamID).Distinct())
+            var teams = PlayerManager.instance.players.Select(p => p.teamID).Distinct().ToArray();
+            foreach (int team in teams)
             {
-                teamHeldFor[tID] = 0f;
+                if (teamHeldFor.ContainsKey(team))
+                {
+                    teamHeldFor[team] = 0f;
+                }
             }
         }
 
@@ -160,6 +165,20 @@ namespace TeamComposition2.GameModes
 
                 int? winningTeamID = null;
 
+                var currentTeams = PlayerManager.instance.players.Select(p => p.teamID).Distinct().ToArray();
+                foreach (int team in currentTeams)
+                {
+                    if (!teamHeldFor.ContainsKey(team))
+                    {
+                        teamHeldFor[team] = 0f;
+                    }
+                }
+
+                if (controllingTeam >= 0)
+                {
+                    teamHeldFor[controllingTeam] += TimeHandler.deltaTime;
+                }
+
                 foreach (int tID in teamHeldFor.Keys.ToList())
                 {
                     float time = teamHeldFor[tID];
@@ -186,6 +205,8 @@ namespace TeamComposition2.GameModes
                     yield return null;
                     awaitingRespawn.Clear();
                     TimeHandler.instance.DoSlowDown();
+                    ResetHeldFor();
+                    SyncHeldFor();
                     NetworkingManager.RPC(
                         typeof(GM_CrownControl),
                         nameof(RPCA_NextRound),
@@ -197,6 +218,11 @@ namespace TeamComposition2.GameModes
                 }
                 yield return null;
             }
+        }
+
+        internal void SetControllingTeam(int teamID)
+        {
+            controllingTeam = teamID;
         }
 
     }
