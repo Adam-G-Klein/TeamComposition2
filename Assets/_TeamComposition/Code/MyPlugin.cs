@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnboundLib;
 using UnboundLib.Cards;
 using UnboundLib.GameModes;
+using UnboundLib.Utils.UI;
 using UnityEngine;
 using TeamComposition2;
 using TeamComposition2.GameModes;
@@ -24,7 +25,10 @@ public class MyPlugin: BaseUnityPlugin{
 		UnityEngine.Debug.Log("here!");
 		asset = Jotunn.Utils.AssetUtils.LoadAssetBundleFromResources("teamcomposition2", typeof(MyPlugin).Assembly);
 		UnityEngine.Debug.Log("asset is null? " + (asset == null ? "true" : "false"));
-		
+
+		// Initialize card toggles
+		TeamComposition2.CardToggleManager.Initialize();
+
 		// Register cleanup hooks
 		GameModeManager.AddHook(GameModeHooks.HookGameEnd, ResetEffects);
 		GameModeManager.AddHook(GameModeHooks.HookGameStart, ResetEffects);
@@ -34,13 +38,25 @@ public class MyPlugin: BaseUnityPlugin{
 	void Start(){
 		UnityEngine.Debug.Log("before load asset!");
 		asset.LoadAsset<GameObject>("ModCards").GetComponent<CardHolder>().RegisterCards();
-		
+
 		// Register Mistletoe card
 		CustomCard.BuildCard<MistletoeCard>();
 		GameModeManager.AddHandler<GM_CrownControl>(CrownControlHandler.GameModeID, new CrownControlHandler());
 		GameModeManager.AddHandler<GM_CrownControl>(TeamCrownControlHandler.GameModeID, new TeamCrownControlHandler());
 
+		// Register card toggle menu
+		Unbound.RegisterMenu("Toggle TC Cards", () => { }, BuildCardToggleMenu, null, false);
+
 		UnityEngine.Debug.Log("after load asset!");
+	}
+
+	private void BuildCardToggleMenu(GameObject menu)
+	{
+		MenuHandler.CreateText("TeamComposition Card Toggle", menu, out var _, 60);
+		MenuHandler.CreateText("Apply card toggles from enableCards.txt", menu, out var _, 30);
+		MenuHandler.CreateButton("Apply Card Toggles", menu, () => {
+			TeamComposition2.CardToggleManager.ApplyCardToggles();
+		});
 	}
 	
 	private IEnumerator ResetEffects(IGameModeHandler gm)
