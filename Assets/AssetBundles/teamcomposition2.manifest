@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 4178040484
+CRC: 2588673191
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 6c6736aaa9d27bed24aab4214c5686e2
+    Hash: 0756a74201ee8e13ae49f494286d234a
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 4de46efefd3feb3f9b92228227486b43
+    Hash: 570f6eab5de778eea22b1b1a9cdc4768
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -36,6 +36,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 8ecb70e12bb06a44286f4bb21d035487, type: 3}
 - Class: 114
+  Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
   Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 - Class: 114
   Script: {fileID: 1301386320, guid: f70555f144d8491a825f0804e09c671c, type: 3}
@@ -57,6 +59,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 4eb7cf041e856c7498f18b9042ec4f95, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 7fc1bd250d829a4488a92e98533742f8, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 0c0e2a655558cca4baa4b537a16c8db2, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 14358d751784b9149a88bd78271792a8, type: 3}
 - Class: 114
@@ -92,7 +96,11 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 40691adf3ad88634d87164788c02d9d6, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 0c0e2a655558cca4baa4b537a16c8db2, type: 3}
+  Script: {fileID: 11500000, guid: e77d3037bd239584b87eb3a7c7d7eef6, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 6502c1d151db3dc4380f0150ce9e19a8, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 807a387f377ee7746bd9ce44d684816d, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 198
@@ -726,6 +734,7 @@ Assets:
 - Assets/_TeamComposition/Assets/CRAssets/Sprite/Capricornleg2.asset
 - Assets/_TeamComposition/Assets/CRAssets/Sprite/QuarterMoon.asset
 - Assets/_TeamComposition/Assets/CRAssets/prefabs/sounds/blackhole2.ogg
+- Assets/RoundsWithBots/Prefabs/BotMenu.prefab
 - Assets/_TeamComposition/Assets/CRAssets/Texture2D/tornadoicon.png
 - Assets/_TeamComposition/Assets/CRAssets/prefabs/C_Star.prefab
 - Assets/_TeamComposition/Assets/CRAssets/AnimatorController/C_HyperSonic.controller

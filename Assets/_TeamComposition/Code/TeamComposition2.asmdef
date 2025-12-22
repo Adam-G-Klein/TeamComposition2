@@ -5,6 +5,8 @@
         "ModdingUtils",
         "RoundsWithFriends",
         "MapEmbiggener",
+        "CardChoiceSpawnUniqueCardPatch",
+        "RarityLib",
         "Unity.TextMeshPro"
     ],
     "precompiledReferences": [
@@ -14,7 +16,8 @@
         "PhotonRealtime.dll",
         "Photon3Unity3D.dll",
         "PhotonUnityNetworking.dll",
-        "SonigonAudioEngine.Runtime.dll"
+        "SonigonAudioEngine.Runtime.dll",
+        "InControl.dll"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [],

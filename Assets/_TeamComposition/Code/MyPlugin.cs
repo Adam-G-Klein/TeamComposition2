@@ -33,11 +33,17 @@ public class MyPlugin: BaseUnityPlugin{
 		// Initialize friendly fire settings and patches
 		TeamComposition2.FriendlyFireManager.Initialize(Config);
 
+		// Initialize bot manager and patches
+		TeamComposition2.Bots.BotManager.Initialize(Config, asset);
+
 		// Register cleanup hooks
 		GameModeManager.AddHook(GameModeHooks.HookGameEnd, ResetEffects);
 		GameModeManager.AddHook(GameModeHooks.HookGameStart, ResetEffects);
 		GameModeManager.AddHook(GameModeHooks.HookPointEnd, PhysicsItemRemover.RemoveItemsOnPointEnd);
 		GameModeManager.AddHook(GameModeHooks.HookPointStart, MapControlPointSpawner.EnsureControlPointExists);
+		// Apply card toggles before each pick phase (HookPickStart fires when card selection UI appears)
+		GameModeManager.AddHook(GameModeHooks.HookGameStart, ApplyCardTogglesBeforePick);
+		GameModeManager.AddHook(GameModeHooks.HookPickStart, ApplyCardTogglesBeforePick);
 	}
 	void Start(){
 		UnityEngine.Debug.Log("before load asset!");
@@ -53,6 +59,9 @@ public class MyPlugin: BaseUnityPlugin{
 
 		// Register friendly fire menu
 		TeamComposition2.FriendlyFireManager.RegisterMenu();
+
+		// Register bot menu and handlers
+		TeamComposition2.Bots.BotManager.RegisterMenuAndHandshake(Config, asset);
 
 		UnityEngine.Debug.Log("after load asset!");
 	}
@@ -74,6 +83,12 @@ public class MyPlugin: BaseUnityPlugin{
 		DestroyAll<MistletoeMono>();
 		DestroyAll<FrozenMono>();
 		DestroyAll<IceRing>();
+		yield break;
+	}
+
+	private IEnumerator ApplyCardTogglesBeforePick(IGameModeHandler gm)
+	{
+		TeamComposition2.CardToggleManager.ApplyCardToggles();
 		yield break;
 	}
 	
