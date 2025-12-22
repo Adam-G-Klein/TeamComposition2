@@ -6,6 +6,7 @@ using UnboundLib.Cards;
 using UnboundLib.GameModes;
 using UnboundLib.Utils.UI;
 using UnityEngine;
+using TMPro;
 using TeamComposition2;
 using TeamComposition2.GameModes;
 using TeamComposition2.GameModes.Physics;
@@ -29,6 +30,9 @@ public class MyPlugin: BaseUnityPlugin{
 		// Initialize card toggles
 		TeamComposition2.CardToggleManager.Initialize();
 
+		// Initialize friendly fire settings and patches
+		TeamComposition2.FriendlyFireManager.Initialize(Config);
+
 		// Register cleanup hooks
 		GameModeManager.AddHook(GameModeHooks.HookGameEnd, ResetEffects);
 		GameModeManager.AddHook(GameModeHooks.HookGameStart, ResetEffects);
@@ -47,6 +51,9 @@ public class MyPlugin: BaseUnityPlugin{
 		// Register card toggle menu
 		Unbound.RegisterMenu("Toggle TC Cards", () => { }, BuildCardToggleMenu, null, false);
 
+		// Register friendly fire menu
+		TeamComposition2.FriendlyFireManager.RegisterMenu();
+
 		UnityEngine.Debug.Log("after load asset!");
 	}
 
@@ -54,8 +61,11 @@ public class MyPlugin: BaseUnityPlugin{
 	{
 		MenuHandler.CreateText("TeamComposition Card Toggle", menu, out var _, 60);
 		MenuHandler.CreateText("Apply card toggles from enableCards.txt", menu, out var _, 30);
-		MenuHandler.CreateButton("Apply Card Toggles", menu, () => {
+		var applyButton = MenuHandler.CreateButton("Apply Card Toggles", menu, null);
+		var buttonText = applyButton.GetComponentInChildren<TextMeshProUGUI>();
+		applyButton.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => {
 			TeamComposition2.CardToggleManager.ApplyCardToggles();
+			buttonText.text = "APPLIED!";
 		});
 	}
 	

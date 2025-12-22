@@ -4,4 +4,5 @@ I am creating a mod for the game Rounds, introducing a lot of sweeping changes t
 - You can always refer to source code in OtherMods/ to see how other mods are performing similar tasks. Some extra important mods:
 	- UnboundLib is in there and is very important, it provides a lot of API scaffolding for all of the other mods.
 	- RoundsWithFriends is a very key mod and is highly stable. The whole modding community exists because of this mod.
+- When adding new files to the project, always remember to update the .csproj file with references to the new file so that we avoid build errors.
 
