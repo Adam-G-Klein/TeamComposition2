@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TeamComposition2.GameModes.Extensions;
+using TeamComposition2;
 using UnboundLib;
 using UnboundLib.Networking;
 using UnityEngine;
@@ -139,7 +140,13 @@ namespace TeamComposition2.GameModes
             yield return new WaitForSecondsRealtime(delay);
             if (awaitingRespawn.Contains(player.playerID))
             {
-                player.transform.position = GetFarthestSpawn(player.teamID);
+                Vector3 respawnPos;
+                if (!TeamSpawnManager.TryGetTeamSpawn(player.teamID, out respawnPos))
+                {
+                    respawnPos = GetFarthestSpawn(player.teamID);
+                }
+
+                player.transform.position = respawnPos;
                 player.data.healthHandler.Revive(true);
                 player.GetComponent<GeneralInput>().enabled = true;
                 awaitingRespawn.Remove(player.playerID);

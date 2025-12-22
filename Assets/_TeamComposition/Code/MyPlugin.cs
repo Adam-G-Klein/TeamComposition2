@@ -1,6 +1,7 @@
 ﻿using BepInEx;
 using System.Collections;
 using System.Collections.Generic;
+using HarmonyLib;
 using UnboundLib;
 using UnboundLib.Cards;
 using UnboundLib.GameModes;
@@ -9,6 +10,7 @@ using UnityEngine;
 using TMPro;
 using TeamComposition2;
 using TeamComposition2.GameModes;
+using TeamComposition2.Patches;
 using TeamComposition2.GameModes.Physics;
 
 [BepInDependency("com.willis.rounds.unbound")]
@@ -32,6 +34,12 @@ public class MyPlugin: BaseUnityPlugin{
 
 		// Initialize friendly fire settings and patches
 		TeamComposition2.FriendlyFireManager.Initialize(Config);
+
+		// Initialize respawn invulnerability settings and patches
+		TeamComposition2.RespawnInvulnerabilityManager.Initialize(Config);
+
+		// Initialize team spawn persistence patches
+		new Harmony("com.adamklein.teamcomposition.teamspawns").PatchAll(typeof(TeamSpawnAssignmentPatch));
 
 		// Initialize bot manager and patches
 		TeamComposition2.Bots.BotManager.Initialize(Config, asset);
@@ -59,6 +67,9 @@ public class MyPlugin: BaseUnityPlugin{
 
 		// Register friendly fire menu
 		TeamComposition2.FriendlyFireManager.RegisterMenu();
+
+		// Register respawn invulnerability menu (pause menu)
+		TeamComposition2.RespawnInvulnerabilityManager.RegisterMenu();
 
 		// Register bot menu and handlers
 		TeamComposition2.Bots.BotManager.RegisterMenuAndHandshake(Config, asset);
