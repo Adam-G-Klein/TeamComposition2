@@ -19,7 +19,8 @@ namespace TeamComposition2.GameModes
     {
         internal static GM_CrownControl instance;
 
-        internal const float secondsNeededToWin = 20f;
+        internal static float secondsNeededToWin = 20f;
+        internal const float defaultSecondsNeededToWin = 20f;
 
         private const float delayPenaltyPerDeath = 1f;
         private const float baseRespawnDelay = 1f;

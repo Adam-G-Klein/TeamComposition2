@@ -74,6 +74,9 @@ public class MyPlugin: BaseUnityPlugin{
 		// Register bot menu and handlers
 		TeamComposition2.Bots.BotManager.RegisterMenuAndHandshake(Config, asset);
 
+		// Register Point Control settings menu (accessible mid-game)
+		TeamComposition2.GameModes.CrownControlMenu.RegisterMenu();
+
 		UnityEngine.Debug.Log("after load asset!");
 	}
 

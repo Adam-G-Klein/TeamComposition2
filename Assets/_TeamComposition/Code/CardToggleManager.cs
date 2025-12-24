@@ -9,6 +9,8 @@ namespace TeamComposition2
         private static HashSet<string> enabledCardNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
             "Brawler",
+            "Christmas Cheer"
+            /*
             "Dazzle",
             "Chase",
             "Leech",
@@ -66,6 +68,7 @@ namespace TeamComposition2
             "Refresh",
             "Teleport",
             "tactical reload"
+            */
         };
 
         /// <summary>
@@ -98,7 +101,6 @@ namespace TeamComposition2
             foreach (var cardEntry in CardManager.cards)
             {
                 var card = cardEntry.Value;
-                if (card.category != "Vanilla") continue;
 
                 var cardDisplayName = card.cardInfo.cardName;
                 bool shouldBeEnabled = enabledCardNames.Contains(cardDisplayName);

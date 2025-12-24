@@ -12,6 +12,18 @@ namespace TeamComposition2.Bots.Patches
         private const float maxDistance = 1.0f;
         public static List<Collider2D> DamageBoxesColliders = new List<Collider2D>();
 
+        [HarmonyPrefix]
+        [HarmonyPatch("ShouldAttack")]
+        public static bool ShouldAttackPrefix()
+        {
+            // Skip the original method entirely when peaceful bots is enabled
+            if (BotMenu.PeacefulBots.Value)
+            {
+                return false;
+            }
+            return true;
+        }
+
         [HarmonyPostfix]
         [HarmonyPatch("Update")]
         public static void UpdatePostfix(PlayerAIPhilip __instance)

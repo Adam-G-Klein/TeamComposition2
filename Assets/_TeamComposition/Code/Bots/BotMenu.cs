@@ -20,6 +20,7 @@ namespace TeamComposition2.Bots
         public static ConfigEntry<float> PreCycleDelay;
         public static ConfigEntry<float> GoToCardDelay;
         public static ConfigEntry<float> PickDelay;
+        public static ConfigEntry<bool> PeacefulBots;
 
         public static GameObject SelectedFaceObject;
 
@@ -39,12 +40,17 @@ namespace TeamComposition2.Bots
             PreCycleDelay = config.Bind(MenuName, "PreCycleDelay", 1f, "The delay before cycling through cards.");
             GoToCardDelay = config.Bind(MenuName, "GoToCardDelay", 0.2f, "The delay between going to a specific card.");
             PickDelay = config.Bind(MenuName, "PickDelay", 0.5f, "The delay before picking a card.");
+
+            PeacefulBots = config.Bind(MenuName, "PeacefulBots", false, "When enabled, bots will not fire at players.");
         }
 
         private static void CreateBotMenu(GameObject mainMenu)
         {
             MenuHandler.CreateText("<b>Rounds With Bots", mainMenu, out TextMeshProUGUI _, 70);
             AddBlank(mainMenu, 50);
+
+            MenuHandler.CreateToggle(PeacefulBots.Value, "<#90EE90>Peaceful Bots", mainMenu, value => PeacefulBots.Value = value, 30);
+            AddBlank(mainMenu, 20);
 
             CreateDetailsMenu(mainMenu);
             AddBlank(mainMenu, 20);

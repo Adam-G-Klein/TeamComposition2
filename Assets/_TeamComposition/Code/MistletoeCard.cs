@@ -39,12 +39,12 @@ public class MistletoeCard : CustomCard
 
     protected override string GetTitle()
     {
-        return "Mistletoe";
+        return "Christmas Cheer";
     }
 
     protected override string GetDescription()
     {
-        return "Hitting an enemy spawns an ice field that slows enemies and heals yourself!";
+        return "Spread cheer to enemies you hit, causing them to heal your nearby allies";
     }
 
     protected override GameObject GetCardArt()
