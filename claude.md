@@ -6,6 +6,7 @@ I am creating a mod for the game Rounds, introducing a lot of sweeping changes t
 	- RoundsWithFriends is a very key mod and is highly stable. The whole modding community exists because of this mod.
 - When adding new files to the project, always remember to update the .csproj file with references to the new file so that we avoid build errors.
 - If you're copying an existing mod into this codebase, remember to copy over all of the unity assets and mark them with the correct asset bundle name "teamcomposition2". If you've done this, notify me at the end of the task so that I can rebuild my assetBundle and the assets will exist when you're done porting the mod
-
-
- 
+- If I tell you to "create a card":
+	- Unless a card is strictly stat-affecting (example: "increase fire rate by 30%" or "increase the effectiveness of all healing effects by 70%"), I will expect the creation of monobehavior classes that are then added as components at runtime to either the player's bullets or the player themselves. Feel free to make multiple monobehaviors for a card if it makes sense.
+	- Try to use the code-heavy method that CR (`OtherMods/CR/`) uses as much as possible: adding components to bullets and players at runtime for monobehaviors that you also create in this mod's sourcecode. This limits the amount of outside asset work we'll have to do.
+	- Remember to add the card name and its class designations to CardRoleManager. Tell me what class designation you gave it at the end of the task

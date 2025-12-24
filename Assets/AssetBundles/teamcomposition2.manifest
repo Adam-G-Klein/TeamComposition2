@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2588673191
+CRC: 4224835477
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 0756a74201ee8e13ae49f494286d234a
+    Hash: 2ed4d7947cdbead6689e9a9c779506a6
   TypeTreeHash:
     serializedVersion: 2
     Hash: 570f6eab5de778eea22b1b1a9cdc4768
@@ -96,11 +96,11 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 40691adf3ad88634d87164788c02d9d6, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: e77d3037bd239584b87eb3a7c7d7eef6, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 6502c1d151db3dc4380f0150ce9e19a8, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 807a387f377ee7746bd9ce44d684816d, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: e77d3037bd239584b87eb3a7c7d7eef6, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 198
@@ -209,6 +209,7 @@ Assets:
 - Assets/_TeamComposition/Assets/CRAssets/Sprite/Leotail2.asset
 - Assets/_TeamComposition/Assets/CRAssets/prefabs/iceicon.prefab
 - Assets/_TeamComposition/Assets/CRAssets/prefabs/C_Pulsar.prefab
+- Assets/_TeamComposition/Assets/Sprites/snail.png
 - Assets/_TeamComposition/Assets/CRAssets/prefabs/sounds/pulsar.ogg
 - Assets/_TeamComposition/Assets/CRAssets/Sprite/Capricornhead.asset
 - Assets/_TeamComposition/Assets/CRAssets/Sprite/Beetledots.asset
@@ -244,6 +245,7 @@ Assets:
 - Assets/_TeamComposition/Assets/CRAssets/Sprite/Mosquitowing.asset
 - Assets/_TeamComposition/Assets/CRAssets/Material/WavesMaterial.mat
 - Assets/_TeamComposition/Assets/CRAssets/prefabs/C_SpeedUp.prefab
+- Assets/_TeamComposition/Assets/Sprites/reticle.png
 - Assets/_TeamComposition/Assets/CRAssets/Texture2D/Pogobot.png
 - Assets/_TeamComposition/Assets/CRAssets/Texture2D/Pisces.png
 - Assets/_TeamComposition/Assets/CRAssets/prefabs/sounds/golden.ogg
@@ -252,6 +254,7 @@ Assets:
 - Assets/_TeamComposition/Assets/CRAssets/Texture2D/Stasisflux.png
 - Assets/_TeamComposition/Assets/CRAssets/AnimatorController/C_Aquarius.controller
 - Assets/_TeamComposition/Assets/CRAssets/AnimatorController/Beetleshell.controller
+- Assets/_TeamComposition/Assets/Sprites/heal.PNG
 - Assets/_TeamComposition/Assets/CRAssets/AnimatorController/C_Stun.controller
 - Assets/_TeamComposition/Assets/CRAssets/prefabs/snowparticles.prefab
 - Assets/_TeamComposition/Assets/CRAssets/Texture2D/Beetleleg.png
@@ -530,6 +533,7 @@ Assets:
 - Assets/_TeamComposition/Assets/CRAssets/Texture2D/crystalicon.png
 - Assets/_TeamComposition/Assets/CRAssets/Sprite/Holstericon.asset
 - Assets/_TeamComposition/Assets/CRAssets/AnimatorController/Beetleleg (4).controller
+- Assets/_TeamComposition/Assets/Sprites/shield.png
 - Assets/_TeamComposition/Assets/CRAssets/prefabs/sounds/quasar.ogg
 - Assets/_TeamComposition/Assets/CRAssets/prefabs/sounds/bulk.ogg
 - Assets/_TeamComposition/Assets/CRAssets/Sprite/DoveSprite.asset

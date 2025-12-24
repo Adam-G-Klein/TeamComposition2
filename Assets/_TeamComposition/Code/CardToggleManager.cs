@@ -1,75 +1,12 @@
 using System;
 using System.Collections.Generic;
+using TeamComposition2.CardRoles;
 using UnboundLib.Utils;
 
 namespace TeamComposition2
 {
     public static class CardToggleManager
     {
-        private static HashSet<string> enabledCardNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-        {
-            "Brawler",
-            "Christmas Cheer"
-            /*
-            "Dazzle",
-            "Chase",
-            "Leech",
-            "Chilling Presence",
-            "Cold Bullets",
-            "Decay",
-            "Defender",
-            "Echo",
-            "Emp",
-            "Frost slam",
-            "Glass cannon",
-            "Huge",
-            "Implode",
-            "Life stealer",
-            "Overpower",
-            "Parasite",
-            "Pristine Perserverance",
-            "Radiance",
-            "Saw",
-            "Shield Charge",
-            "Shields up",
-            "Shockwave",
-            "Silence",
-            "Static field",
-            "Supernova",
-            "Tank",
-            "Taste of blood",
-            "Barrage",
-            "Big bullet",
-            "Bouncy",
-            "Abyssal Countdown",
-            "Buckshot",
-            "Burst",
-            "Careful Planning",
-            "Explosive Bullet",
-            "Drill Ammo",
-            "Fastball",
-            "Fast Forward",
-            "Grow",
-            "Homing",
-            "Mayhem",
-            "Poison",
-            "Quick shot",
-            "Radar shot",
-            "Riccochet",
-            "Scavenger",
-            "Spray",
-            "Steady shot",
-            "Target bounce",
-            "Thruster",
-            "Toxic cloud",
-            "Trickster",
-            "Wind up",
-            "Quick Reload",
-            "Refresh",
-            "Teleport",
-            "tactical reload"
-            */
-        };
 
         /// <summary>
         /// Call this in Awake() to register the card toggle callback.
@@ -77,7 +14,6 @@ namespace TeamComposition2
         public static void Initialize()
         {
             UnityEngine.Debug.Log($"[TeamComposition2] CardToggleManager.Initialize called");
-            UnityEngine.Debug.Log($"[TeamComposition2] enabledCardNames has {enabledCardNames.Count} entries");
             UnityEngine.Debug.Log($"[TeamComposition2] Registering OnAllCardsLoaded callback");
             CardManager.AddAllCardsCallback(OnAllCardsLoaded);
         }
@@ -89,12 +25,12 @@ namespace TeamComposition2
         }
 
         /// <summary>
-        /// Applies the card toggles: disables all Vanilla cards, then enables only those in the list.
-        /// Sets config values so RestoreCardToggles() will apply our settings.
+        /// Applies the card toggles based on CardRoleManager.
+        /// Cards not in the role map or with the Disabled role are disabled.
         /// </summary>
         public static void ApplyCardToggles()
         {
-            UnityEngine.Debug.Log($"[TeamComposition2] ApplyCardToggles called. enabledCardNames has {enabledCardNames.Count} entries");
+            UnityEngine.Debug.Log($"[TeamComposition2] ApplyCardToggles called");
             int enabledCount = 0;
             int disabledCount = 0;
 
@@ -103,7 +39,7 @@ namespace TeamComposition2
                 var card = cardEntry.Value;
 
                 var cardDisplayName = card.cardInfo.cardName;
-                bool shouldBeEnabled = enabledCardNames.Contains(cardDisplayName);
+                bool shouldBeEnabled = CardRoleManager.IsCardEnabled(cardDisplayName);
 
                 // Set the config value - RestoreCardToggles() will read this
                 card.config.Value = shouldBeEnabled;
@@ -128,13 +64,19 @@ namespace TeamComposition2
 
         /// <summary>
         /// Enable a card by its display name at runtime.
+        /// Sets the card role to None if it was Disabled or not in the map.
         /// </summary>
         public static bool EnableCard(string displayName)
         {
             var cardInfo = FindCardByDisplayName(displayName);
             if (cardInfo != null)
             {
-                enabledCardNames.Add(displayName);
+                // If card is disabled or not in map, set to None to enable it
+                var currentRole = CardRoleManager.GetCardRole(displayName);
+                if (currentRole == CardRole.Disabled || !CardRoleManager.IsCardInRoleMap(displayName))
+                {
+                    CardRoleManager.SetCardRole(displayName, CardRole.None);
+                }
                 CardManager.EnableCard(cardInfo, false);
                 return true;
             }
@@ -144,13 +86,14 @@ namespace TeamComposition2
 
         /// <summary>
         /// Disable a card by its display name at runtime.
+        /// Sets the card role to Disabled.
         /// </summary>
         public static bool DisableCard(string displayName)
         {
             var cardInfo = FindCardByDisplayName(displayName);
             if (cardInfo != null)
             {
-                enabledCardNames.Remove(displayName);
+                CardRoleManager.SetCardRole(displayName, CardRole.Disabled);
                 CardManager.DisableCard(cardInfo, false);
                 return true;
             }
@@ -159,32 +102,11 @@ namespace TeamComposition2
         }
 
         /// <summary>
-        /// Check if a card is in the enabled list.
+        /// Check if a card is enabled (in the role map and not disabled).
         /// </summary>
         public static bool IsCardInEnabledList(string displayName)
         {
-            return enabledCardNames.Contains(displayName);
-        }
-
-        /// <summary>
-        /// Get a copy of all currently enabled card names.
-        /// </summary>
-        public static HashSet<string> GetEnabledCardNames()
-        {
-            return new HashSet<string>(enabledCardNames, StringComparer.OrdinalIgnoreCase);
-        }
-
-        /// <summary>
-        /// Set the enabled cards list and apply immediately.
-        /// </summary>
-        public static void SetEnabledCards(IEnumerable<string> cardNames)
-        {
-            enabledCardNames.Clear();
-            foreach (var name in cardNames)
-            {
-                enabledCardNames.Add(name);
-            }
-            ApplyCardToggles();
+            return CardRoleManager.IsCardEnabled(displayName);
         }
 
         private static CardInfo FindCardByDisplayName(string displayName)

@@ -12,6 +12,7 @@ using TeamComposition2;
 using TeamComposition2.GameModes;
 using TeamComposition2.Patches;
 using TeamComposition2.GameModes.Physics;
+using TeamComposition2.CardRoles;
 
 [BepInDependency("com.willis.rounds.unbound")]
 [BepInDependency("pykess.rounds.plugins.moddingutils")]
@@ -38,8 +39,18 @@ public class MyPlugin: BaseUnityPlugin{
 		// Initialize respawn invulnerability settings and patches
 		TeamComposition2.RespawnInvulnerabilityManager.Initialize(Config);
 
+		// Initialize stat modifier settings for Point Control mode
+		TeamComposition2.GameModes.StatModifierSettings.Initialize(Config);
+
 		// Initialize team spawn persistence patches
 		new Harmony("com.adamklein.teamcomposition.teamspawns").PatchAll(typeof(TeamSpawnAssignmentPatch));
+
+		// Disable card selection input while game is paused
+		new Harmony("com.adamklein.teamcomposition.cardchoicepause").PatchAll(typeof(TeamComposition2.Patches.CardChoicePausePatch));
+
+		// Card role visual patches (text and icon indicators)
+		new Harmony("com.adamklein.teamcomposition.cardroletext").PatchAll(typeof(TeamComposition2.CardRoles.CardInfoAwakePatch));
+		new Harmony("com.adamklein.teamcomposition.cardroleicon").PatchAll(typeof(TeamComposition2.CardRoles.CardInfoIconAwakePatch));
 
 		// Initialize bot manager and patches
 		TeamComposition2.Bots.BotManager.Initialize(Config, asset);
@@ -52,6 +63,10 @@ public class MyPlugin: BaseUnityPlugin{
 		// Apply card toggles before each pick phase (HookPickStart fires when card selection UI appears)
 		GameModeManager.AddHook(GameModeHooks.HookGameStart, ApplyCardTogglesBeforePick);
 		GameModeManager.AddHook(GameModeHooks.HookPickStart, ApplyCardTogglesBeforePick);
+
+		// Register card role tracking hooks
+		GameModeManager.AddHook(GameModeHooks.HookGameStart, PlayerCardRolesExtension.ResetAllPlayerCardRoles);
+		GameModeManager.AddHook(GameModeHooks.HookPlayerPickEnd, PlayerCardRolesExtension.RecalculateAllPlayerCardRoles);
 	}
 	void Start(){
 		UnityEngine.Debug.Log("before load asset!");
