@@ -118,7 +118,17 @@ public class MistletoeMono : RayHitEffect
                     this.ice.transform.right = hit.transform.right;
                     this.ice.transform.localScale *= 1.9f;
                     this.ice.AddComponent<RemoveAfterSeconds>().seconds = 4.2f;
-                    this.ice.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
+                    SpriteRenderer sr = this.ice.GetComponent<SpriteRenderer>();
+                    if (sr != null)
+                    {
+                        // Tone down glow and lower alpha to make the snowflake less distracting
+                        Color muted = new Color(0.7f, 0.85f, 1f, 0.55f);
+                        sr.color = muted;
+                        if (sr.material != null && sr.material.HasProperty("_EmissionColor"))
+                        {
+                            sr.material.SetColor("_EmissionColor", muted * 0.35f);
+                        }
+                    }
                     if (this.ice.GetComponent<Animator>() != null)
                     {
                         this.ice.GetComponent<Animator>().recorderStartTime = 0f;

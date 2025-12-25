@@ -1,8 +1,11 @@
 using BepInEx.Configuration;
+using Photon.Pun;
 using TMPro;
+using TeamComposition2.Bots.Extensions;
 using UnboundLib;
 using UnboundLib.Utils.UI;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace TeamComposition2.Bots
 {
@@ -26,7 +29,7 @@ namespace TeamComposition2.Bots
 
         public static void RegisterMenu(ConfigFile config)
         {
-            Unbound.RegisterMenu(MenuName, () => { }, CreateBotMenu, null, false);
+            Unbound.RegisterMenu(MenuName, () => { }, CreateBotMenu, null, true);
 
             DebugMode = config.Bind(MenuName, "DebugMode", false, "Enable or disable debug mode for additional logging and debugging features.");
             RandomizationFace = config.Bind(MenuName, "RandomizationFace", true, "Enable or disable randomization of bot faces.");
@@ -46,11 +49,25 @@ namespace TeamComposition2.Bots
 
         private static void CreateBotMenu(GameObject mainMenu)
         {
+            bool isPauseMenu = IsPauseMenu(mainMenu);
+
             MenuHandler.CreateText("<b>Rounds With Bots", mainMenu, out TextMeshProUGUI _, 70);
             AddBlank(mainMenu, 50);
 
-            MenuHandler.CreateToggle(PeacefulBots.Value, "<#90EE90>Peaceful Bots", mainMenu, value => PeacefulBots.Value = value, 30);
-            AddBlank(mainMenu, 20);
+            if (isPauseMenu)
+            {
+                MenuHandler.CreateToggle(PeacefulBots.Value, "<#90EE90>Peaceful Bots", mainMenu, value => PeacefulBots.Value = value, 30);
+                AddBlank(mainMenu, 15);
+
+                var oneHealthButton = MenuHandler.CreateButton("Set Bot Health To 1 HP", mainMenu, null, 35);
+                oneHealthButton.GetComponent<Button>().onClick.AddListener(LowerBotsToOneHealth);
+                AddBlank(mainMenu, 20);
+            }
+            else
+            {
+                MenuHandler.CreateText("Peaceful Bots can now be toggled from the in-game pause menu.", mainMenu, out TextMeshProUGUI _, 30, false);
+                AddBlank(mainMenu, 20);
+            }
 
             CreateDetailsMenu(mainMenu);
             AddBlank(mainMenu, 20);
@@ -121,6 +138,51 @@ namespace TeamComposition2.Bots
         private static void AddBlank(GameObject menu, int size = 30)
         {
             MenuHandler.CreateText(" ", menu, out TextMeshProUGUI _, size);
+        }
+
+        private static bool IsPauseMenu(GameObject menu)
+        {
+            var escapeMenu = UIHandler.instance?.transform.Find("Canvas/EscapeMenu");
+            return escapeMenu != null && menu != null && menu.transform.IsChildOf(escapeMenu);
+        }
+
+        private static void LowerBotsToOneHealth()
+        {
+            if (!PhotonNetwork.IsMasterClient && !PhotonNetwork.OfflineMode)
+            {
+                Unbound.BuildInfoPopup("Only the host can lower bot health mid-game.");
+                return;
+            }
+
+            if (PlayerManager.instance?.players == null)
+            {
+                Unbound.BuildInfoPopup("No players found to adjust.");
+                return;
+            }
+
+            int adjusted = 0;
+            foreach (var player in PlayerManager.instance.players)
+            {
+                if (player == null || player.data == null || !player.data.GetAdditionalData().IsBot)
+                {
+                    continue;
+                }
+
+                float damageToApply = Mathf.Max(0f, player.data.health - 1f);
+                if (damageToApply <= 0f)
+                {
+                    continue;
+                }
+
+                player.data.healthHandler.CallTakeDamage(Vector2.down * damageToApply, player.transform.position, null, null, true);
+                adjusted++;
+            }
+
+            string message = adjusted > 0
+                ? $"Lowered {adjusted} bot(s) to 1 HP for healing tests."
+                : "No bots needed adjustment (already at or below 1 HP).";
+
+            Unbound.BuildInfoPopup(message);
         }
     }
 }

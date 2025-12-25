@@ -84,6 +84,10 @@ public class MyPlugin: BaseUnityPlugin{
 
 		// Register Mistletoe card
 		CustomCard.BuildCard<MistletoeCard>();
+        // Register Empty Zen card
+        CustomCard.BuildCard<EmptyZenCard>();
+        // Register Float Like a Butterfly card
+        CustomCard.BuildCard<FloatLikeAButterflyCard>();
 		GameModeManager.AddHandler<GM_CrownControl>(CrownControlHandler.GameModeID, new CrownControlHandler());
 		GameModeManager.AddHandler<GM_CrownControl>(TeamCrownControlHandler.GameModeID, new TeamCrownControlHandler());
 

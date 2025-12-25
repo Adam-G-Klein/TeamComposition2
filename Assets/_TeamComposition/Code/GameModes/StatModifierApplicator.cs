@@ -155,12 +155,14 @@ namespace TeamComposition2.GameModes
             float baseHealth = StatModifierSettings.SliderValueToMultiplier(StatModifierSettings.BaseMaxHealth.Value);
             float baseSpeed = StatModifierSettings.SliderValueToMultiplier(StatModifierSettings.BaseMovementSpeed.Value);
             float baseJump = StatModifierSettings.SliderValueToMultiplier(StatModifierSettings.BaseJumpHeight.Value);
+            float baseDamage = StatModifierSettings.SliderValueToMultiplier(StatModifierSettings.BaseDamage.Value);
+            float baseHealing = StatModifierSettings.SliderValueToMultiplier(StatModifierSettings.BaseHealing.Value);
 
             modifiers.HealthMultiplier = baseHealth;
             modifiers.MovementSpeedMultiplier = baseSpeed;
             modifiers.JumpMultiplier = baseJump;
-            modifiers.DamageMultiplier = 1f;
-            modifiers.HealingMultiplier = 1f;
+            modifiers.DamageMultiplier = baseDamage;
+            modifiers.HealingMultiplier = baseHealing;
 
             // Apply Tank class bonuses (per card)
             int tankCards = rolesData.TankCount;

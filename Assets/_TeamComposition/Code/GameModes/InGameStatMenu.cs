@@ -48,6 +48,14 @@ namespace TeamComposition2.GameModes
                 StatModifierSettings.BaseMaxHealth.Value,
                 value => StatModifierSettings.BaseMaxHealth.Value = value);
 
+            CreateStatSlider(menu, "Base Damage",
+                StatModifierSettings.BaseDamage.Value,
+                value => StatModifierSettings.BaseDamage.Value = value);
+
+            CreateStatSlider(menu, "Base Healing",
+                StatModifierSettings.BaseHealing.Value,
+                value => StatModifierSettings.BaseHealing.Value = value);
+
             AddBlank(menu, 25);
 
             // Tank Class Section

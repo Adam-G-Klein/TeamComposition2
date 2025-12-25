@@ -16,12 +16,29 @@ public class ParticleExplosionModifier : MonoBehaviour
 
 	private void Start()
 	{
+		if (curve == null)
+		{
+			Debug.LogWarning("ParticleExplosionModifier missing curve, disabling.");
+			base.enabled = false;
+			return;
+		}
 		effect = GetComponent<ParticleSystem>();
+		if (effect == null)
+		{
+			Debug.LogWarning("ParticleExplosionModifier missing ParticleSystem, disabling.");
+			base.enabled = false;
+			return;
+		}
 		main = effect.main;
 		Explosion componentInParent = GetComponentInParent<Explosion>();
+		if (componentInParent == null)
+		{
+			Debug.LogWarning("ParticleExplosionModifier missing Explosion parent, disabling.");
+			base.enabled = false;
+			return;
+		}
 		componentInParent.DealDamageAction = (Action<Damagable>)Delegate.Combine(componentInParent.DealDamageAction, new Action<Damagable>(DealDamage));
-		Explosion componentInParent2 = GetComponentInParent<Explosion>();
-		componentInParent2.DealHealAction = (Action<Damagable>)Delegate.Combine(componentInParent2.DealHealAction, new Action<Damagable>(DealDamage));
+		componentInParent.DealHealAction = (Action<Damagable>)Delegate.Combine(componentInParent.DealHealAction, new Action<Damagable>(DealDamage));
 	}
 
 	public void DealDamage(Damagable damagable)

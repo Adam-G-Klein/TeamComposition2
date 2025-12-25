@@ -97,7 +97,7 @@ namespace TeamComposition2.CardRoles
             rectTransform.anchorMin = new Vector2(0.5f, 1f);
             rectTransform.anchorMax = new Vector2(0.5f, 1f);
             rectTransform.pivot = new Vector2(0.5f, 0f);
-            rectTransform.anchoredPosition = new Vector2(0f, 120f); // 120 units above the top
+            rectTransform.anchoredPosition = new Vector2(0f, 150f); // 150 units above the top
             rectTransform.sizeDelta = new Vector2(400f, 400f); // Icon size (5x scale)
 
             // Add Image component and set the sprite

@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnboundLib;
@@ -59,6 +60,10 @@ namespace RWF.Patches
                 return true;
             }
 
+            if (!teamPoints.ContainsKey(teamID) || !teamRounds.ContainsKey(teamID)) {
+                return true;
+            }
+
             var parent = __instance.p1Parent.parent;
             var counter = parent.GetChild(teamID + 1);
             
@@ -84,7 +89,13 @@ namespace RWF.Patches
                 return;
             }
 
-            var numTeams = teamPoints != null ? teamPoints.Count : 2;
+            // Only draw teams that exist in both dictionaries to avoid stale/mismatched keys
+            var teamIds = teamPoints.Keys.Intersect(teamRounds.Keys).OrderBy(id => id).ToList();
+            if (teamIds.Count == 0) {
+                return;
+            }
+
+            var numTeams = teamIds.Count;
             var roundCountOrange = parent.Find("P1").gameObject;
             var roundCountBlue = parent.Find("P2").gameObject;
             var deltaY = roundCountBlue.transform.position.y - roundCountOrange.transform.position.y;
@@ -92,6 +103,7 @@ namespace RWF.Patches
 
             // This postfix just adds handling for more than two teams, so we skip instantiating the first two
             for (int i = 0; i < numTeams; i++) {
+                var teamId = teamIds[i];
                 GameObject roundCountGo = null;
 
                 if (i <= 1)
@@ -109,21 +121,23 @@ namespace RWF.Patches
 
                 for (int j = 0; j < roundCountGo.transform.childCount; j++) {
                     var child = roundCountGo.transform.GetChild(j);
+                    var rounds = teamRounds.ContainsKey(teamId) ? teamRounds[teamId] : 0;
+                    var points = teamPoints.ContainsKey(teamId) ? teamPoints[teamId] : 0;
 
                     // fill rounds
-                    if (teamRounds[i] > j)
+                    if (rounds > j)
                     {
-                        child.GetComponentInChildren<Image>().color = PlayerSkinBank.GetPlayerSkinColors(PlayerManager.instance.GetPlayersInTeam(i)[0].colorID()).color;
+                        child.GetComponentInChildren<Image>().color = PlayerSkinBank.GetPlayerSkinColors(PlayerManager.instance.GetPlayersInTeam(teamId)[0].colorID()).color;
                         child.GetComponentInChildren<Image>().type = Image.Type.Simple;
                         child.localScale = Vector3.one;
                     }
-                    else if (teamRounds[i] == j && teamPoints[i] > 0)
+                    else if (rounds == j && points > 0)
                     {
                         // use radial filling for points - so that any number of points per round are supported
-                        child.GetComponentInChildren<Image>().color = PlayerSkinBank.GetPlayerSkinColors(PlayerManager.instance.GetPlayersInTeam(i)[0].colorID()).color;
+                        child.GetComponentInChildren<Image>().color = PlayerSkinBank.GetPlayerSkinColors(PlayerManager.instance.GetPlayersInTeam(teamId)[0].colorID()).color;
                         child.GetComponentInChildren<Image>().type = Image.Type.Filled;
                         child.GetComponentInChildren<Image>().fillMethod = Image.FillMethod.Radial360;
-                        child.GetComponentInChildren<Image>().fillAmount = (float) teamPoints[i] / (int) GameModeManager.CurrentHandler.Settings["pointsToWinRound"];
+                        child.GetComponentInChildren<Image>().fillAmount = (float) points / (int) GameModeManager.CurrentHandler.Settings["pointsToWinRound"];
                         child.localScale = new Vector3(1f, -1f, 1f);
 
                     }

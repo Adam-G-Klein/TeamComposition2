@@ -76,8 +76,9 @@ namespace TeamComposition2.CardRoles
             // This is SEPARATE from lifesteal/regen which are not affected by the heal stat.
             // ============================================
             { "Healing Field", CardRole.Heal },   // Pure healing - AOE heal field
-            { "Christmas Cheer", CardRole.Heal }, // Pure healing - heals nearby allies via IceRing
+            //{ "Christmas Cheer", CardRole.Heal }, // Pure healing - heals nearby allies via IceRing
             { "Phoenix", CardRole.Heal },
+            { "Empty Zen", CardRole.Heal },
 
             // ============================================
             // LIFESTEAL CARDS - NOT pure healing, do NOT benefit from heal stat
@@ -112,7 +113,6 @@ namespace TeamComposition2.CardRoles
             { "Grow", CardRole.None },
             { "Quick Reload", CardRole.None },
             */
-            { "tactical reload", CardRole.None },
         };
 
         /// <summary>

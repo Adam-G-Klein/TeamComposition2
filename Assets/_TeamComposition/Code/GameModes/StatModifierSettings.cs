@@ -20,6 +20,8 @@ namespace TeamComposition2.GameModes
         public static ConfigEntry<float> BaseMovementSpeed;
         public static ConfigEntry<float> BaseJumpHeight;
         public static ConfigEntry<float> BaseMaxHealth;
+        public static ConfigEntry<float> BaseDamage;
+        public static ConfigEntry<float> BaseHealing;
 
         // ============================================
         // TANK CLASS MODIFIERS (per card)
@@ -70,6 +72,10 @@ namespace TeamComposition2.GameModes
                 "Base jump height modifier. 0 = no change, +10 = 25x, -10 = 1/25x");
             BaseMaxHealth = config.Bind(MenuName, "BaseMaxHealth", 0f,
                 "Base max health modifier. 0 = no change, +10 = 25x, -10 = 1/25x");
+            BaseDamage = config.Bind(MenuName, "BaseDamage", 0f,
+                "Base damage modifier applied to all players. 0 = no change, +10 = 25x, -10 = 1/25x");
+            BaseHealing = config.Bind(MenuName, "BaseHealing", 0f,
+                "Base healing modifier applied to all players. 0 = no change, +10 = 25x, -10 = 1/25x");
 
             // Tank Class
             TankHealthPerCard = config.Bind(MenuName, "TankHealthPerCard", 0f,
@@ -166,6 +172,8 @@ namespace TeamComposition2.GameModes
             BaseMovementSpeed.Value = 0f;
             BaseJumpHeight.Value = 0f;
             BaseMaxHealth.Value = 0f;
+            BaseDamage.Value = 0f;
+            BaseHealing.Value = 0f;
 
             // Tank Class
             TankHealthPerCard.Value = 0f;

@@ -99,6 +99,12 @@ namespace TeamComposition2.GameModes
             CreateStatSlider(baseStatsMenu, "Maximum Health",
                 StatModifierSettings.BaseMaxHealth.Value,
                 value => StatModifierSettings.BaseMaxHealth.Value = value);
+            AddBlank(baseStatsMenu, 20);
+
+            // Healing
+            CreateStatSlider(baseStatsMenu, "Base Healing",
+                StatModifierSettings.BaseHealing.Value,
+                value => StatModifierSettings.BaseHealing.Value = value);
             AddBlank(baseStatsMenu, 30);
 
             // Reset button for base stats
@@ -107,6 +113,7 @@ namespace TeamComposition2.GameModes
                 StatModifierSettings.BaseMovementSpeed.Value = 0f;
                 StatModifierSettings.BaseJumpHeight.Value = 0f;
                 StatModifierSettings.BaseMaxHealth.Value = 0f;
+                StatModifierSettings.BaseHealing.Value = 0f;
                 StatModifierApplicator.RefreshAllPlayerStats();
             }, 30);
         }
