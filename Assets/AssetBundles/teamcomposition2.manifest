@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1380540665
+CRC: 921358136
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: f4d7ca146073e82490fe897f51a308a1
+    Hash: 0f375c208d385665d367ac0a823244f9
   TypeTreeHash:
     serializedVersion: 2
     Hash: 6a1ea2fda8102e9f027c22981268fdab
@@ -437,6 +437,7 @@ Assets:
 - Assets/_TeamComposition/Assets/CRAssets/prefabs/sounds/love.ogg
 - Assets/_TeamComposition/Assets/CRAssets/Sprite/Dronebod.asset
 - Assets/_TeamComposition/Assets/CRAssets/Texture2D/Rainbowicon.png
+- Assets/_TeamComposition/Assets/PersistentHealingZone.prefab
 - Assets/_TeamComposition/Assets/CRAssets/Texture2D/Dropball 1.png
 - Assets/_TeamComposition/Assets/CRAssets/AnimatorController/C_Comet.controller
 - Assets/_TeamComposition/Assets/CRAssets/AnimatorController/C_Meiosis.controller

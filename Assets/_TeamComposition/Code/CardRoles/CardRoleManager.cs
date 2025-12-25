@@ -27,7 +27,7 @@ namespace TeamComposition2.CardRoles
             { "Shield Charge", CardRole.Tank },
             { "Pristine Perserverance", CardRole.Tank },
             */
-            { "Tank", CardRole.Tank },
+            //{ "Tank", CardRole.Tank },
 
             // ============================================
             // ATK CARDS - Offensive/damage focused
@@ -68,7 +68,7 @@ namespace TeamComposition2.CardRoles
             { "Abyssal Countdown", CardRole.Atk },
             { "Radar shot", CardRole.Atk },
             */
-            { "Steady shot", CardRole.Atk },
+            //{ "Steady shot", CardRole.Atk },
 
             // ============================================
             // HEAL CARDS - Pure healing effects
@@ -80,6 +80,8 @@ namespace TeamComposition2.CardRoles
             { "Phoenix", CardRole.Heal },
             { "Empty Zen", CardRole.Heal },
             { "Self-Sufficient", CardRole.Heal },
+            { "Float Like a Butterfly", CardRole.Heal },
+
 
             // ============================================
             // LIFESTEAL CARDS - NOT pure healing, do NOT benefit from heal stat

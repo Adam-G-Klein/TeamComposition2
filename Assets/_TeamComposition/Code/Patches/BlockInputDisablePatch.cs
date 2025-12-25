@@ -20,7 +20,7 @@ namespace TeamComposition2.Patches
             public bool ManualPressed;
         }
 
-        private static readonly ConditionalWeakTable<GeneralInput, ManualBlockState> ManualPresses = new();
+        private static readonly ConditionalWeakTable<GeneralInput, ManualBlockState> ManualPresses = new ConditionalWeakTable<GeneralInput, ManualBlockState>();
 
         internal static bool WasManualPress(GeneralInput input)
         {
