@@ -15,6 +15,7 @@ using TeamComposition2.Patches;
 using TeamComposition2.GameModes.Physics;
 using TeamComposition2.CardRoles;
 using TeamComposition2.Stats;
+using TeamComposition2.AutoAim;
 
 namespace TeamComposition2
 {
@@ -62,6 +63,34 @@ namespace TeamComposition2
 		// Healing effectiveness patches (for pure healing effects like Healing Field and Christmas Cheer)
 		new Harmony("com.adamklein.teamcomposition.healingeffectiveness").PatchAll(typeof(TeamComposition2.Patches.HealingEffectivenessPatches));
 
+		// Role-locked card spawner patches (locks leftmost N card slots to player's role sequence)
+		new Harmony("com.adamklein.teamcomposition.rolelockedspawner").PatchAll(typeof(TeamComposition2.CardRoles.RoleLockedReplaceCardsPatch));
+		new Harmony("com.adamklein.teamcomposition.rolelockedspawner").PatchAll(typeof(TeamComposition2.CardRoles.RoleLockedSpawnPatch));
+
+		// Auto-aim patches (toggle input and aim override)
+		new Harmony("com.adamklein.teamcomposition.autoaimpatch").PatchAll(typeof(AutoAimPatch));
+		new Harmony("com.adamklein.teamcomposition.autoaiminput").PatchAll(typeof(AutoAimPlayerActionsConstructorPatch));
+		new Harmony("com.adamklein.teamcomposition.autoaiminput").PatchAll(typeof(AutoAimControllerBindingsPatch));
+		new Harmony("com.adamklein.teamcomposition.autoaiminput").PatchAll(typeof(AutoAimKeyboardBindingsPatch));
+
+		// Block suppression patch (intercepts TryBlock to trigger ability effects without defensive window)
+		new Harmony("com.adamklein.teamcomposition.blocktryblock").PatchAll(typeof(BlockTryBlockPatch));
+
+		// Map material patch (replaces SFShadowed materials with flat white DefaultSprite material)
+		new Harmony("com.adamklein.teamcomposition.mapmaterial").PatchAll(typeof(MapMaterialPatch));
+		MapMaterialPatch.Initialize();
+
+		// Map particle fill patch (replaces map particle layer with flat white fill and disables particles)
+		System.Type mapParticleFillPatchType = AccessTools.TypeByName("TeamComposition2.Patches.MapParticleFillPatch");
+		if (mapParticleFillPatchType != null)
+		{
+			new Harmony("com.adamklein.teamcomposition.mapparticlefill").PatchAll(mapParticleFillPatchType);
+		}
+		else
+		{
+			UnityEngine.Debug.LogWarning("[TeamComposition2] MapParticleFillPatch type not found; map particle layer will not be flattened.");
+		}
+
 		// Initialize bot manager and patches
 		TeamComposition2.Bots.BotManager.Initialize(Config, asset);
 
@@ -85,14 +114,16 @@ namespace TeamComposition2
 		UnityEngine.Debug.Log("before load asset!");
 		asset.LoadAsset<GameObject>("ModCards").GetComponent<CardHolder>().RegisterCards();
 
-		// Register Mistletoe card
-		CustomCard.BuildCard<MistletoeCard>();
+        // Register Mistletoe card
+        CustomCard.BuildCard<MistletoeCard>();
         // Register Empty Zen card
         CustomCard.BuildCard<EmptyZenCard>();
         // Register Float Like a Butterfly card
         CustomCard.BuildCard<FloatLikeAButterflyCard>();
         // Register Self-Sufficient card
         CustomCard.BuildCard<SelfSufficientCard>();
+        // Register Retreat and Regroup card
+        CustomCard.BuildCard<RetreatAndRegroupCard>();
 		GameModeManager.AddHandler<GM_CrownControl>(CrownControlHandler.GameModeID, new CrownControlHandler());
 		GameModeManager.AddHandler<GM_CrownControl>(TeamCrownControlHandler.GameModeID, new TeamCrownControlHandler());
 

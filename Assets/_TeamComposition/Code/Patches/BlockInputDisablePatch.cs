@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using System.Reflection;
 using HarmonyLib;
 using UnityEngine;
@@ -6,52 +5,54 @@ using UnityEngine;
 namespace TeamComposition2.Patches
 {
     /// <summary>
-    /// Tracks manual block button presses so they can be converted into ability triggers
-    /// without enabling the actual block window.
+    /// Intercepts TryBlock calls and redirects them to trigger ability effects only,
+    /// preventing the defensive block window (sinceBlock) from activating while still
+    /// firing all block-based ability hooks and respecting cooldowns.
     /// </summary>
-    [HarmonyPatch(typeof(GeneralInput), "Update")]
-    internal static class BlockInputDisablePatch
+    [HarmonyPatch(typeof(Block), "TryBlock")]
+    internal static class BlockTryBlockPatch
     {
-        // Cached reflection accessors to work around internal/private members on game types.
+        // Cached reflection accessor for internal simulated field.
         private static readonly FieldInfo SimulatedField = AccessTools.Field(typeof(PlayerVelocity), "simulated");
 
-        private class ManualBlockState
-        {
-            public bool ManualPressed;
-        }
-
-        private static readonly ConditionalWeakTable<GeneralInput, ManualBlockState> ManualPresses = new ConditionalWeakTable<GeneralInput, ManualBlockState>();
-
-        internal static bool WasManualPress(GeneralInput input)
-        {
-            return ManualPresses.TryGetValue(input, out var state) && state.ManualPressed;
-        }
-
-        internal static void ClearManualPress(GeneralInput input)
-        {
-            if (ManualPresses.TryGetValue(input, out var state))
-            {
-                state.ManualPressed = false;
-            }
-        }
-
-        private static void Postfix(GeneralInput __instance)
+        private static bool Prefix(Block __instance)
         {
             var data = __instance.GetComponent<CharacterData>();
+            if (data == null || data.playerVel == null)
+            {
+                return false; // Skip original
+            }
 
-            // Record whether the player physically pressed the block button this frame.
-            bool manualPressed = data?.playerActions?.Block?.WasPressed == true;
-            ManualPresses.GetOrCreateValue(__instance).ManualPressed = manualPressed;
+            // Only allow if player is simulated (i.e., actively playing).
+            if (!IsSimulated(data.playerVel))
+            {
+                return false; // Skip original
+            }
+
+            // Only trigger if block is off cooldown (same check as original TryBlock).
+            if (__instance.counter >= __instance.Cooldown())
+            {
+                // Trigger all block effects (heals, spawned objects, events) without
+                // granting the defensive block window (onlyBlockEffects = true prevents
+                // sinceBlock from being set to 0).
+                __instance.RPCA_DoBlock(true, false, BlockTrigger.BlockTriggerType.Default, default, true);
+
+                // Reset counter to put block on cooldown (same as original TryBlock).
+                __instance.counter = 0f;
+            }
+
+            // Skip the original TryBlock to prevent the defensive block window.
+            return false;
         }
 
-        internal static bool IsSimulated(PlayerVelocity playerVelocity)
+        private static bool IsSimulated(PlayerVelocity playerVelocity)
         {
             if (playerVelocity == null)
             {
                 return false;
             }
 
-            // Field is internal on the vanilla class; reflection keeps us compatible across assemblies.
+            // Field is internal on the vanilla class; reflection keeps us compatible.
             if (SimulatedField != null && SimulatedField.GetValue(playerVelocity) is bool simulated)
             {
                 return simulated;
@@ -59,56 +60,6 @@ namespace TeamComposition2.Patches
 
             // Fall back to true so we do not incorrectly block gameplay if reflection fails.
             return true;
-        }
-    }
-
-    /// <summary>
-    /// Converts manual block button presses into block-triggered effects only,
-    /// preventing the defensive block while still firing block-based ability hooks
-    /// and honoring cooldowns.
-    /// </summary>
-    [HarmonyPatch(typeof(Block), "Update")]
-    internal static class BlockInputRedirectPatch
-    {
-        private static void Prefix(Block __instance)
-        {
-            var input = __instance.GetComponent<GeneralInput>();
-            if (input == null)
-            {
-                return;
-            }
-
-            if (BlockInputDisablePatch.WasManualPress(input))
-            {
-                // Stop the vanilla block from seeing the manual press.
-                input.shieldWasPressed = false;
-            }
-        }
-
-        private static void Postfix(Block __instance)
-        {
-            var input = __instance.GetComponent<GeneralInput>();
-            if (input == null || !BlockInputDisablePatch.WasManualPress(input))
-            {
-                return;
-            }
-
-            var data = __instance.GetComponent<CharacterData>();
-            if (data == null || data.playerVel == null || !BlockInputDisablePatch.IsSimulated(data.playerVel))
-            {
-                BlockInputDisablePatch.ClearManualPress(input);
-                return;
-            }
-
-            // Only trigger if block is off cooldown, mirroring TryBlock behavior.
-            if (__instance.counter >= __instance.Cooldown())
-            {
-                // Trigger all block effects (heals, spawned objects, events) without
-                // granting the defensive block window.
-                __instance.RPCA_DoBlock(true, false, BlockTrigger.BlockTriggerType.Default, default, true);
-            }
-
-            BlockInputDisablePatch.ClearManualPress(input);
         }
     }
 }

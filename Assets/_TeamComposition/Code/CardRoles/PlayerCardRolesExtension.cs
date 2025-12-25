@@ -28,11 +28,18 @@ namespace TeamComposition2.CardRoles
         /// </summary>
         public int HealCount { get; set; }
 
+        /// <summary>
+        /// The sequence of roles the player has picked, in order.
+        /// Each entry corresponds to a card picked, storing its role.
+        /// </summary>
+        public List<CardRole> RoleSequence { get; private set; }
+
         public PlayerCardRolesData()
         {
             TankCount = 0;
             AtkCount = 0;
             HealCount = 0;
+            RoleSequence = new List<CardRole>();
         }
 
         /// <summary>
@@ -43,6 +50,7 @@ namespace TeamComposition2.CardRoles
             TankCount = 0;
             AtkCount = 0;
             HealCount = 0;
+            RoleSequence.Clear();
         }
 
         /// <summary>
@@ -72,10 +80,13 @@ namespace TeamComposition2.CardRoles
         }
 
         /// <summary>
-        /// Increments the count for the given role.
+        /// Increments the count for the given role and adds it to the sequence.
         /// </summary>
         public void AddRole(CardRole role)
         {
+            // Add to sequence for all roles (including None for tracking purposes)
+            RoleSequence.Add(role);
+
             switch (role)
             {
                 case CardRole.Tank:
@@ -92,6 +103,7 @@ namespace TeamComposition2.CardRoles
 
         /// <summary>
         /// Decrements the count for the given role.
+        /// Note: Does not modify RoleSequence - use RecalculateFromCards for full reset.
         /// </summary>
         public void RemoveRole(CardRole role)
         {
@@ -127,8 +139,9 @@ namespace TeamComposition2.CardRoles
         }
 
         /// <summary>
-        /// Recalculates the role counts from the player's current cards.
+        /// Recalculates the role counts and sequence from the player's current cards.
         /// Call this after cards are added/removed to ensure counts are accurate.
+        /// This rebuilds the RoleSequence from the player's currentCards list order.
         /// </summary>
         public static void RecalculateCardRoles(this Player player)
         {
@@ -144,6 +157,8 @@ namespace TeamComposition2.CardRoles
                 var role = CardRoleManager.GetCardRole(card);
                 rolesData.AddRole(role);
             }
+
+            UnityEngine.Debug.Log($"[TeamComposition2] Player {player.playerID} role sequence recalculated: [{string.Join(", ", rolesData.RoleSequence)}]");
         }
 
         /// <summary>

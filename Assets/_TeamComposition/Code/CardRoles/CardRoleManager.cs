@@ -25,9 +25,9 @@ namespace TeamComposition2.CardRoles
             { "Huge", CardRole.Tank },
             { "Shields up", CardRole.Tank },
             { "Shield Charge", CardRole.Tank },
-            { "Pristine Perserverance", CardRole.Tank },
             */
-            //{ "Tank", CardRole.Tank },
+            { "Pristine Perserverance", CardRole.Tank },
+            { "Tank", CardRole.Tank },
 
             // ============================================
             // ATK CARDS - Offensive/damage focused
@@ -66,9 +66,9 @@ namespace TeamComposition2.CardRoles
             { "Static field", CardRole.Atk },
             { "Decay", CardRole.Atk },
             { "Abyssal Countdown", CardRole.Atk },
-            { "Radar shot", CardRole.Atk },
             */
-            //{ "Steady shot", CardRole.Atk },
+            { "Radar shot", CardRole.Atk },
+            { "Steady shot", CardRole.Atk },
 
             // ============================================
             // HEAL CARDS - Pure healing effects
@@ -77,10 +77,11 @@ namespace TeamComposition2.CardRoles
             // ============================================
             { "Healing Field", CardRole.Heal },   // Pure healing - AOE heal field
             //{ "Christmas Cheer", CardRole.Heal }, // Pure healing - heals nearby allies via IceRing
-            { "Phoenix", CardRole.Heal },
+            //{ "Phoenix", CardRole.Heal },
             { "Empty Zen", CardRole.Heal },
             { "Self-Sufficient", CardRole.Heal },
-            { "Float Like a Butterfly", CardRole.Heal },
+            //{ "Float Like a Butterfly", CardRole.Heal },
+            //{ "Retreat and Regroup", CardRole.Heal },
 
 
             // ============================================
