@@ -10,4 +10,7 @@ I am creating a mod for the game Rounds, introducing a lot of sweeping changes t
 	- Unless a card is strictly stat-affecting (example: "increase fire rate by 30%" or "increase the effectiveness of all healing effects by 70%"), I will expect the creation of monobehavior classes that are then added as components at runtime to either the player's bullets or the player themselves. Feel free to make multiple monobehaviors for a card if it makes sense.
 	- Try to use the code-heavy method that CR (`OtherMods/CR/`) uses as much as possible: adding components to bullets and players at runtime for monobehaviors that you also create in this mod's sourcecode. This limits the amount of outside asset work we'll have to do.
 	- Remember to add the card name and its class designations to CardRoleManager. Tell me what class designation you gave it at the end of the task
-- Anytime I say "activate their ability", I'm talking about hitting the block button. Blocking is disabled in this mod, but that same button will be used to activate many of the new abilities the mod adds. Cards should say "You ability triggers ___" for example, but the input is the same as the block button in the implementation.
+- Anytime I say "activate their ability":
+	- I'm talking about hitting the block button. Blocking is disabled in this mod, but that same button will be used to activate many of the new abilities the mod adds. Cards should say "You ability triggers ___" for example, but the input is the same as the block button in the implementation. 
+	- Additionally, any used "ability" should trigger the block cooldown and shouldn't be usable again until the player's nlock is off-cooldown.
+- Add the UnityEngine prefix to all log statements added

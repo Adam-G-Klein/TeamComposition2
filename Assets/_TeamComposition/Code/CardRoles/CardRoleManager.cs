@@ -79,6 +79,7 @@ namespace TeamComposition2.CardRoles
             //{ "Christmas Cheer", CardRole.Heal }, // Pure healing - heals nearby allies via IceRing
             { "Phoenix", CardRole.Heal },
             { "Empty Zen", CardRole.Heal },
+            { "Self-Sufficient", CardRole.Heal },
 
             // ============================================
             // LIFESTEAL CARDS - NOT pure healing, do NOT benefit from heal stat

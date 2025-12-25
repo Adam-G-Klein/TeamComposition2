@@ -8,6 +8,7 @@ using UnboundLib.GameModes;
 using UnboundLib.Utils.UI;
 using UnityEngine;
 using TMPro;
+using System.Linq;
 using TeamComposition2;
 using TeamComposition2.GameModes;
 using TeamComposition2.Patches;
@@ -15,18 +16,20 @@ using TeamComposition2.GameModes.Physics;
 using TeamComposition2.CardRoles;
 using TeamComposition2.Stats;
 
-[BepInDependency("com.willis.rounds.unbound")]
-[BepInDependency("pykess.rounds.plugins.moddingutils")]
-[BepInDependency("pykess.rounds.plugins.cardchoicespawnuniquecardpatch")]
-[BepInDependency("pykess.rounds.plugins.mapembiggener")]
-[BepInDependency("io.olavim.rounds.mapsextended")]
-[BepInDependency("io.olavim.rounds.rwf")]
-[BepInPlugin("com.adamklein.teamcomposition", "TeamComposition2", "0.0.0")]
-[BepInProcess("Rounds.exe")]
-public class MyPlugin: BaseUnityPlugin{
-	internal static string modInitials = "TC";
-	internal static AssetBundle asset;
-	void Awake(){
+namespace TeamComposition2
+{
+	[BepInDependency("com.willis.rounds.unbound")]
+	[BepInDependency("pykess.rounds.plugins.moddingutils")]
+	[BepInDependency("pykess.rounds.plugins.cardchoicespawnuniquecardpatch")]
+	[BepInDependency("pykess.rounds.plugins.mapembiggener")]
+	[BepInDependency("io.olavim.rounds.mapsextended")]
+	[BepInDependency("io.olavim.rounds.rwf")]
+	[BepInPlugin("com.adamklein.teamcomposition", "TeamComposition2", "0.0.0")]
+	[BepInProcess("Rounds.exe")]
+	public class MyPlugin: BaseUnityPlugin{
+		internal static string modInitials = "TC";
+		internal static AssetBundle asset;
+		void Awake(){
 		UnityEngine.Debug.Log("here!");
 		asset = Jotunn.Utils.AssetUtils.LoadAssetBundleFromResources("teamcomposition2", typeof(MyPlugin).Assembly);
 		UnityEngine.Debug.Log("asset is null? " + (asset == null ? "true" : "false"));
@@ -77,8 +80,8 @@ public class MyPlugin: BaseUnityPlugin{
 
 		// Register healing effectiveness reset hook
 		GameModeManager.AddHook(GameModeHooks.HookGameStart, ResetHealingEffectiveness);
-	}
-	void Start(){
+		}
+		void Start(){
 		UnityEngine.Debug.Log("before load asset!");
 		asset.LoadAsset<GameObject>("ModCards").GetComponent<CardHolder>().RegisterCards();
 
@@ -88,6 +91,8 @@ public class MyPlugin: BaseUnityPlugin{
         CustomCard.BuildCard<EmptyZenCard>();
         // Register Float Like a Butterfly card
         CustomCard.BuildCard<FloatLikeAButterflyCard>();
+        // Register Self-Sufficient card
+        CustomCard.BuildCard<SelfSufficientCard>();
 		GameModeManager.AddHandler<GM_CrownControl>(CrownControlHandler.GameModeID, new CrownControlHandler());
 		GameModeManager.AddHandler<GM_CrownControl>(TeamCrownControlHandler.GameModeID, new TeamCrownControlHandler());
 
@@ -110,10 +115,10 @@ public class MyPlugin: BaseUnityPlugin{
 		TeamComposition2.GameModes.InGameStatMenu.RegisterMenu();
 
 		UnityEngine.Debug.Log("after load asset!");
-	}
+		}
 
-	private void BuildCardToggleMenu(GameObject menu)
-	{
+		private void BuildCardToggleMenu(GameObject menu)
+		{
 		MenuHandler.CreateText("TeamComposition Card Toggle", menu, out var _, 60);
 		MenuHandler.CreateText("Apply card toggles from enableCards.txt", menu, out var _, 30);
 		var applyButton = MenuHandler.CreateButton("Apply Card Toggles", menu, null);
@@ -122,35 +127,96 @@ public class MyPlugin: BaseUnityPlugin{
 			TeamComposition2.CardToggleManager.ApplyCardToggles();
 			buttonText.text = "APPLIED!";
 		});
-	}
-	
-	private IEnumerator ResetEffects(IGameModeHandler gm)
-	{
+		}
+		
+		private IEnumerator ResetEffects(IGameModeHandler gm)
+		{
 		DestroyAll<MistletoeMono>();
 		DestroyAll<FrozenMono>();
 		DestroyAll<IceRing>();
 		yield break;
-	}
+		}
 
-	private IEnumerator ApplyCardTogglesBeforePick(IGameModeHandler gm)
-	{
+		private IEnumerator ApplyCardTogglesBeforePick(IGameModeHandler gm)
+		{
 		TeamComposition2.CardToggleManager.ApplyCardToggles();
 		yield break;
-	}
+		}
 
-	private IEnumerator ResetHealingEffectiveness(IGameModeHandler gm)
-	{
+		private IEnumerator ResetHealingEffectiveness(IGameModeHandler gm)
+		{
 		HealingEffectivenessExtension.ResetAllPlayerHealingEffectiveness();
 		yield break;
-	}
-	
-	private void DestroyAll<T>() where T : UnityEngine.Object
-	{
+		}
+		
+		private void DestroyAll<T>() where T : UnityEngine.Object
+		{
 		T[] array = UnityEngine.Object.FindObjectsOfType<T>();
 		for (int i = array.Length - 1; i >= 0; i--)
 		{
 			UnityEngine.Object.Destroy(array[i]);
 		}
+		}
+	}
+
+	/// <summary>
+	/// Rare card that lets a player's own healing fields heal themselves.
+	/// </summary>
+	public class SelfSufficientCard : CustomCard
+	{
+		public override void SetupCard(CardInfo cardInfo, Gun gun, ApplyCardStats cardStats, CharacterStatModifiers statModifiers, Block block)
+		{
+			// No direct stat changes; effect handled via OnAdd/OnRemove.
+		}
+
+		public override void OnAddCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
+		{
+			if (player != null)
+			{
+				player.SetCanHealSelfWithHealingFields(true);
+			}
+		}
+
+		public override void OnRemoveCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
+		{
+			if (player == null)
+			{
+				return;
+			}
+
+			// Keep the flag enabled if another copy of the card remains.
+			bool hasAnotherCopy = player.data?.currentCards?.Any(c => c != null && c.cardName == GetTitle()) == true;
+			if (!hasAnotherCopy)
+			{
+				player.SetCanHealSelfWithHealingFields(false);
+			}
+		}
+
+		protected override string GetTitle() => "Self-Sufficient";
+
+		protected override string GetDescription() => "Your healing fields now heal you too.";
+
+		protected override GameObject GetCardArt() => MyPlugin.asset?.LoadAsset<GameObject>("C_HealingField");
+
+		protected override CardInfo.Rarity GetRarity() => CardInfo.Rarity.Rare;
+
+		protected override CardInfoStat[] GetStats()
+		{
+			return new CardInfoStat[]
+			{
+				new CardInfoStat
+				{
+					positive = true,
+					stat = "Healing fields",
+					amount = "Can heal yourself",
+					simepleAmount = CardInfoStat.SimpleAmount.aLotOf
+				}
+			};
+		}
+
+		protected override CardThemeColor.CardThemeColorType GetTheme() => CardThemeColor.CardThemeColorType.DefensiveBlue;
+
+		public override string GetModName() => MyPlugin.modInitials;
 	}
 }
 

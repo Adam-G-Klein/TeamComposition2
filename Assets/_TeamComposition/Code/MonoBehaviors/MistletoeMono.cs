@@ -4,6 +4,7 @@ using Sonigon;
 using Sonigon.Internal;
 using UnityEngine;
 using Object = UnityEngine.Object;
+using TeamComposition2;
 
 public class MistletoeMono : RayHitEffect
 {

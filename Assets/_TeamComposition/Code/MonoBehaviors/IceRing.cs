@@ -4,6 +4,7 @@ using Sonigon.Internal;
 using TeamComposition2.Stats;
 using UnityEngine;
 using Object = UnityEngine.Object;
+using TeamComposition2;
 
 // the thing that spawns if the hit occurs
 public class IceRing : MonoBehaviour

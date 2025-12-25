@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 3163569842
+CRC: 1380540665
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 9a53308cd092671f1fadc6d6cccd11f5
+    Hash: f4d7ca146073e82490fe897f51a308a1
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 570f6eab5de778eea22b1b1a9cdc4768
+    Hash: 6a1ea2fda8102e9f027c22981268fdab
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -31,6 +31,8 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 114
   Script: {fileID: 11500000, guid: 36b8080194ccf1b4d98073c07755e25c, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f06ecf71048836a4b8670dd69f862483, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 25a2d191570291a4c8ca26547d482857, type: 3}
 - Class: 114
@@ -64,17 +66,33 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 14358d751784b9149a88bd78271792a8, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 8d3745e6286516c4181052936142102d, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: db7dde67b00ebd54699b60664f268188, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 5409aae735f3e7f47a0d1c32f4cef7a1, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: fddbb0b842805694691c747fc53b8d2a, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: d09e61d8798559c41879e0963ec23e72, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 0a7455d82e3521142be110549e6130ef, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 254e41397e040304690b19ee3bda7608, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 820e4e3905cb94c4aa9e1e1e3c95718c, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: bafaf4e9b63575e45a27e3cc3925dabe, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 7856b36abd6a1884788657fb4ba1b419, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 334723ba7dd2cc0459c94202a1e8499e, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: b0aab8cac80ff7b4ea27ca8441bf51b8, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: a89d10daf3634254bb2e6b79b9ee4280, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 6322680b2805d5c4d905cbdb2e91e5ea, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
 - Class: 114
@@ -83,6 +101,10 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 0b60005c27cf7f74da7d625fe205cd5b, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 98b2bbcc09027464da20acbbb271927e, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 55b2212d591d72445917d376cc9e1244, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: fd9f6d4d74043334281d3546a90c919c, type: 3}
 - Class: 114
   Script: {fileID: 786953031, guid: fbb25f4d567ecbd439bfbdcfed7eb232, type: 3}
 - Class: 114
@@ -102,6 +124,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: e77d3037bd239584b87eb3a7c7d7eef6, type: 3}
 - Class: 115
+  Script: {instanceID: 0}
+- Class: 120
   Script: {instanceID: 0}
 - Class: 198
   Script: {instanceID: 0}
@@ -207,6 +231,7 @@ Assets:
 - Assets/_TeamComposition/Assets/CRAssets/Sprite/Careenicon.asset
 - Assets/_TeamComposition/Assets/CRAssets/Texture2D/Allsticker.png
 - Assets/_TeamComposition/Assets/CRAssets/Sprite/Leotail2.asset
+- Assets/GameObject/A_Healing Field.prefab
 - Assets/_TeamComposition/Assets/CRAssets/prefabs/iceicon.prefab
 - Assets/_TeamComposition/Assets/CRAssets/prefabs/C_Pulsar.prefab
 - Assets/_TeamComposition/Assets/Sprites/snail.png
@@ -370,6 +395,7 @@ Assets:
 - Assets/_TeamComposition/Assets/CRAssets/Sprite/CrescentMoon.asset
 - Assets/_TeamComposition/Assets/CRAssets/Texture2D/Taurus.png
 - Assets/_TeamComposition/Assets/CRAssets/prefabs/sounds/stun.ogg
+- Assets/Material/CrossFade.mat
 - Assets/_TeamComposition/Assets/CRAssets/Sprite/Librascale3.asset
 - Assets/_TeamComposition/Assets/CRAssets/Sprite/Bellball.asset
 - Assets/_TeamComposition/Assets/CRAssets/Sprite/FullMoon.asset
@@ -473,6 +499,7 @@ Assets:
 - Assets/_TeamComposition/Assets/CRAssets/Texture2D/Sagittarius.png
 - Assets/_TeamComposition/Assets/CRAssets/Sprite/Gravityicon.asset
 - Assets/_TeamComposition/Assets/CRAssets/prefabs/C_Dropshot.prefab
+- Assets/GameObject/E_HealingCircle.prefab
 - Assets/_TeamComposition/Assets/CRAssets/Sprite/Taurustail.asset
 - Assets/_TeamComposition/Assets/CRAssets/Sprite/Triangle1.asset
 - Assets/_TeamComposition/Assets/CRAssets/prefabs/C_Crush.prefab
@@ -601,6 +628,7 @@ Assets:
 - Assets/_TeamComposition/Assets/CRAssets/AnimatorController/Beetleleg (1).controller
 - Assets/_TeamComposition/Assets/CRAssets/prefabs/C_Heartition.prefab
 - Assets/_TeamComposition/Assets/CRAssets/prefabs/C_Lovehertz.prefab
+- Assets/Resources/shaders/UI/Procedural UI Image.shader
 - Assets/_TeamComposition/Assets/CRAssets/Texture2D/hiveicon.png
 - Assets/_TeamComposition/Assets/CRAssets/Material/FireballMaterial.mat
 - Assets/_TeamComposition/Assets/CRAssets/Texture2D/Beetledots.png
@@ -612,6 +640,7 @@ Assets:
 - Assets/_TeamComposition/Assets/CRAssets/Sprite/Quasaricon.asset
 - Assets/_TeamComposition/Assets/DefaultSprite.mat
 - Assets/_TeamComposition/Assets/CRAssets/AnimatorController/C_Aries.controller
+- Assets/Resources/procedural_ui_image_default_sprite.asset
 - Assets/_TeamComposition/Assets/CRAssets/Sprite/Asteroidicon.asset
 - Assets/_TeamComposition/Assets/CRAssets/Texture2D/Squidtenta1.png
 - Assets/_TeamComposition/Assets/CRAssets/Texture2D/Taurusleg2.png

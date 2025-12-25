@@ -53,22 +53,10 @@ namespace CardChoiceSpawnUniqueCardPatch
                 player = PlayerManager.instance.players[__instance.pickrID];
             }
 
-            // the slot index is the number of cards already spawned in this selection
-            var spawnedCards = (List<GameObject>)Traverse.Create(__instance).Field("spawnedCards").GetValue();
-            int slotIndex = spawnedCards.Count;
-
-            CardCategory targetCategory = CardChoicePatchSpawnUniqueCard.GetDesiredCategoryForSlot(player, slotIndex);
             CardInfo validCard = null;
             if (CardChoice.instance.cards.Length > 0)
             {
-                // First try to satisfy the desired category for this slot so the left N slots mirror the player's current card categories.
-                validCard = Cards.instance.GetRandomCardWithCondition(player, null, null, null, null, null, null, null, CardChoicePatchSpawnUniqueCard.GetCondition(__instance, targetCategory));
-
-                // If no card matches that category, fall back to any allowed card to keep the UI filled.
-                if (validCard == null && targetCategory != null)
-                {
-                    validCard = Cards.instance.GetRandomCardWithCondition(player, null, null, null, null, null, null, null, CardChoicePatchSpawnUniqueCard.GetCondition(__instance, null));
-                }
+                validCard = Cards.instance.GetRandomCardWithCondition(player, null, null, null, null, null, null, null, CardChoicePatchSpawnUniqueCard.GetCondition(__instance));
             }
 
             if (validCard != null)

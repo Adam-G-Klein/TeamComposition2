@@ -24,10 +24,17 @@ namespace TeamComposition2.Stats
         /// </summary>
         public float HealingDealtMultiplier { get; set; } = 1f;
 
+        /// <summary>
+        /// When true, the player's own healing fields are allowed to heal them.
+        /// Default false to preserve vanilla behavior.
+        /// </summary>
+        public bool AllowSelfHealingFields { get; set; } = false;
+
         public void Reset()
         {
             HealingReceivedMultiplier = 1f;
             HealingDealtMultiplier = 1f;
+            AllowSelfHealingFields = false;
         }
     }
 
@@ -77,6 +84,22 @@ namespace TeamComposition2.Stats
         public static void SetHealingDealtMultiplier(this Player player, float multiplier)
         {
             player.GetHealingEffectivenessData().HealingDealtMultiplier = multiplier;
+        }
+
+        /// <summary>
+        /// Gets whether this player can be healed by their own healing fields.
+        /// </summary>
+        public static bool CanHealSelfWithHealingFields(this Player player)
+        {
+            return player.GetHealingEffectivenessData().AllowSelfHealingFields;
+        }
+
+        /// <summary>
+        /// Sets whether this player can be healed by their own healing fields.
+        /// </summary>
+        public static void SetCanHealSelfWithHealingFields(this Player player, bool allow)
+        {
+            player.GetHealingEffectivenessData().AllowSelfHealingFields = allow;
         }
 
         /// <summary>

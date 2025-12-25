@@ -17,16 +17,34 @@ namespace TeamComposition2.Patches
         /// </summary>
         [HarmonyPatch(typeof(Explosion), "DoExplosionEffects")]
         [HarmonyPrefix]
-        private static void ExplosionHealingPrefix(Explosion __instance, ref float ___damage)
+        private static bool ExplosionHealingPrefix(Explosion __instance, Collider2D hitCol, ref float ___damage)
         {
             // Only modify if this is a healing explosion (negative damage)
             if (___damage >= 0f)
-                return;
+                return true;
+
+            // Block the healer from benefiting from their own healing field
+            // (identified by the marker added in HealingFieldTaggerPatch).
+            if (__instance.GetComponent<TeamComposition2.HealingFieldTeamMarker>() != null)
+            {
+                var targetData = hitCol != null ? hitCol.gameObject.GetComponentInParent<CharacterData>() : null;
+                var spawnedAttack = __instance.GetComponent<SpawnedAttack>();
+                var spawner = spawnedAttack != null ? spawnedAttack.spawner : null;
+
+                if (targetData != null && spawner != null && targetData.player == spawner)
+                {
+                    // Allow self-healing only when explicitly enabled (e.g., via Self-Sufficient card)
+                    if (!spawner.CanHealSelfWithHealingFields())
+                    {
+                        return false;
+                    }
+                }
+            }
 
             // Get the spawner to apply their healing multiplier
             var spawned = __instance.GetComponent<SpawnedAttack>();
             if (spawned == null || spawned.spawner == null)
-                return;
+                return true;
 
             float healingMultiplier = spawned.spawner.GetHealingDealtMultiplier();
             if (healingMultiplier != 1f)
@@ -35,6 +53,8 @@ namespace TeamComposition2.Patches
                 ___damage *= healingMultiplier;
                 Debug.Log($"[HealingEffectiveness] Applied {healingMultiplier:F2}x healing multiplier to Healing Field from player {spawned.spawner.playerID}");
             }
+
+            return true;
         }
     }
 }

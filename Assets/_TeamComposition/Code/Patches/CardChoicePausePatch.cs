@@ -13,7 +13,6 @@ namespace TeamComposition2.Patches
         static bool Prefix()
         {
             // Block card selection input when escape menu is open (game paused)
-            UnityEngine.Debug.Log("[TeamComposition2] Card selection blocked due to pause.");
             return !EscapeMenuHandler.isEscMenu;
         }
     }

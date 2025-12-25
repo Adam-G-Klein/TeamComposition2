@@ -85,7 +85,7 @@ public class EmptyZenEffect : MonoBehaviour
         stats.OnReloadDoneAction -= OnReload;
         stats.OnReloadDoneAction += OnReload;
 
-        fieldPrefab = MyPlugin.asset?.LoadAsset<GameObject>("A_Healing Field");
+        fieldPrefab = MyPlugin.asset?.LoadAsset<GameObject>("E_HealingCircle");
     }
 
     private void OnDisable()
@@ -118,10 +118,10 @@ public class EmptyZenEffect : MonoBehaviour
     {
         if (fieldPrefab == null)
         {
-            fieldPrefab = MyPlugin.asset?.LoadAsset<GameObject>("A_Healing Field");
+            fieldPrefab = MyPlugin.asset?.LoadAsset<GameObject>("E_HealingCircle");
             if (fieldPrefab == null)
             {
-                Debug.LogWarning("[EmptyZen] Could not load A_Healing Field prefab from asset bundle.");
+                UnityEngine.Debug.LogWarning("[EmptyZen] Could not load E_HealingCircle prefab from asset bundle.");
                 return;
             }
         }

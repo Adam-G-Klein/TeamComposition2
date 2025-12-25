@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnboundLib.Cards;
 using UnityEngine;
+using TeamComposition2;
 
 public class CardHolder : MonoBehaviour
 {
