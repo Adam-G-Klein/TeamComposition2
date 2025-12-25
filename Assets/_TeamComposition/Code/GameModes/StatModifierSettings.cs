@@ -5,10 +5,10 @@ namespace TeamComposition2.GameModes
 {
     /// <summary>
     /// Holds all stat modifier settings for the Point Control game mode.
-    /// Slider values range from -5 to +5 where:
+    /// Slider values range from -10 to +10 where:
     /// - 0 = no change (multiplier of 1)
-    /// - +5 = multiply stat by 5
-    /// - -5 = divide stat by 5
+    /// - +10 = multiply stat by 25
+    /// - -10 = divide stat by 25
     /// </summary>
     public static class StatModifierSettings
     {
@@ -65,68 +65,68 @@ namespace TeamComposition2.GameModes
         {
             // Base Stats
             BaseMovementSpeed = config.Bind(MenuName, "BaseMovementSpeed", 0f,
-                "Base movement speed modifier. 0 = no change, +5 = 5x, -5 = 1/5x");
+                "Base movement speed modifier. 0 = no change, +10 = 25x, -10 = 1/25x");
             BaseJumpHeight = config.Bind(MenuName, "BaseJumpHeight", 0f,
-                "Base jump height modifier. 0 = no change, +5 = 5x, -5 = 1/5x");
+                "Base jump height modifier. 0 = no change, +10 = 25x, -10 = 1/25x");
             BaseMaxHealth = config.Bind(MenuName, "BaseMaxHealth", 0f,
-                "Base max health modifier. 0 = no change, +5 = 5x, -5 = 1/5x");
+                "Base max health modifier. 0 = no change, +10 = 25x, -10 = 1/25x");
 
             // Tank Class
             TankHealthPerCard = config.Bind(MenuName, "TankHealthPerCard", 0f,
-                "Tank health multiplier per tank card. 0 = no change, +5 = 5x, -5 = 1/5x");
-            TankHealthPerCardMin = config.Bind(MenuName, "TankHealthPerCardMin", -5f,
+                "Tank health multiplier per tank card. 0 = no change, +10 = 25x, -10 = 1/25x");
+            TankHealthPerCardMin = config.Bind(MenuName, "TankHealthPerCardMin", -10f,
                 "Minimum value for tank health multiplier");
-            TankHealthPerCardMax = config.Bind(MenuName, "TankHealthPerCardMax", 5f,
+            TankHealthPerCardMax = config.Bind(MenuName, "TankHealthPerCardMax", 10f,
                 "Maximum value for tank health multiplier");
 
             TankMovementSpeedPerCard = config.Bind(MenuName, "TankMovementSpeedPerCard", 0f,
                 "Tank movement speed multiplier per tank card");
-            TankMovementSpeedPerCardMin = config.Bind(MenuName, "TankMovementSpeedPerCardMin", -5f,
+            TankMovementSpeedPerCardMin = config.Bind(MenuName, "TankMovementSpeedPerCardMin", -10f,
                 "Minimum value for tank movement speed multiplier");
-            TankMovementSpeedPerCardMax = config.Bind(MenuName, "TankMovementSpeedPerCardMax", 5f,
+            TankMovementSpeedPerCardMax = config.Bind(MenuName, "TankMovementSpeedPerCardMax", 10f,
                 "Maximum value for tank movement speed multiplier");
 
             TankJumpHeightPerCard = config.Bind(MenuName, "TankJumpHeightPerCard", 0f,
                 "Tank jump height multiplier per tank card");
-            TankJumpHeightPerCardMin = config.Bind(MenuName, "TankJumpHeightPerCardMin", -5f,
+            TankJumpHeightPerCardMin = config.Bind(MenuName, "TankJumpHeightPerCardMin", -10f,
                 "Minimum value for tank jump height multiplier");
-            TankJumpHeightPerCardMax = config.Bind(MenuName, "TankJumpHeightPerCardMax", 5f,
+            TankJumpHeightPerCardMax = config.Bind(MenuName, "TankJumpHeightPerCardMax", 10f,
                 "Maximum value for tank jump height multiplier");
 
             // Healer Class
             HealerHealingPerCard = config.Bind(MenuName, "HealerHealingPerCard", 0f,
                 "Healer healing multiplier per healer card");
-            HealerHealingPerCardMin = config.Bind(MenuName, "HealerHealingPerCardMin", -5f,
+            HealerHealingPerCardMin = config.Bind(MenuName, "HealerHealingPerCardMin", -10f,
                 "Minimum value for healer healing multiplier");
-            HealerHealingPerCardMax = config.Bind(MenuName, "HealerHealingPerCardMax", 5f,
+            HealerHealingPerCardMax = config.Bind(MenuName, "HealerHealingPerCardMax", 10f,
                 "Maximum value for healer healing multiplier");
 
             HealerMovementSpeedPerCard = config.Bind(MenuName, "HealerMovementSpeedPerCard", 0f,
                 "Healer movement speed multiplier per healer card");
-            HealerMovementSpeedPerCardMin = config.Bind(MenuName, "HealerMovementSpeedPerCardMin", -5f,
+            HealerMovementSpeedPerCardMin = config.Bind(MenuName, "HealerMovementSpeedPerCardMin", -10f,
                 "Minimum value for healer movement speed multiplier");
-            HealerMovementSpeedPerCardMax = config.Bind(MenuName, "HealerMovementSpeedPerCardMax", 5f,
+            HealerMovementSpeedPerCardMax = config.Bind(MenuName, "HealerMovementSpeedPerCardMax", 10f,
                 "Maximum value for healer movement speed multiplier");
 
             // Attack Class
             AttackDamagePerCard = config.Bind(MenuName, "AttackDamagePerCard", 0f,
                 "Attack damage multiplier per attack card");
-            AttackDamagePerCardMin = config.Bind(MenuName, "AttackDamagePerCardMin", -5f,
+            AttackDamagePerCardMin = config.Bind(MenuName, "AttackDamagePerCardMin", -10f,
                 "Minimum value for attack damage multiplier");
-            AttackDamagePerCardMax = config.Bind(MenuName, "AttackDamagePerCardMax", 5f,
+            AttackDamagePerCardMax = config.Bind(MenuName, "AttackDamagePerCardMax", 10f,
                 "Maximum value for attack damage multiplier");
 
             AttackMovementSpeedPerCard = config.Bind(MenuName, "AttackMovementSpeedPerCard", 0f,
                 "Attack movement speed multiplier per attack card");
-            AttackMovementSpeedPerCardMin = config.Bind(MenuName, "AttackMovementSpeedPerCardMin", -5f,
+            AttackMovementSpeedPerCardMin = config.Bind(MenuName, "AttackMovementSpeedPerCardMin", -10f,
                 "Minimum value for attack movement speed multiplier");
-            AttackMovementSpeedPerCardMax = config.Bind(MenuName, "AttackMovementSpeedPerCardMax", 5f,
+            AttackMovementSpeedPerCardMax = config.Bind(MenuName, "AttackMovementSpeedPerCardMax", 10f,
                 "Maximum value for attack movement speed multiplier");
         }
 
         /// <summary>
-        /// Converts a slider value (-5 to +5) to a multiplier.
-        /// 0 = 1x (no change), +5 = 5x, -5 = 0.2x (1/5)
+        /// Converts a slider value (-10 to +10) to a multiplier.
+        /// 0 = 1x (no change), +10 = 25x, -10 = 0.04x (1/25)
         /// Uses exponential scaling: 5^(value/5)
         /// </summary>
         public static float SliderValueToMultiplier(float sliderValue)
@@ -139,7 +139,7 @@ namespace TeamComposition2.GameModes
         /// </summary>
         public static float MultiplierToSliderValue(float multiplier)
         {
-            if (multiplier <= 0f) return -5f;
+            if (multiplier <= 0f) return -10f;
             return 5f * Mathf.Log(multiplier) / Mathf.Log(5f);
         }
 
@@ -169,34 +169,34 @@ namespace TeamComposition2.GameModes
 
             // Tank Class
             TankHealthPerCard.Value = 0f;
-            TankHealthPerCardMin.Value = -5f;
-            TankHealthPerCardMax.Value = 5f;
+            TankHealthPerCardMin.Value = -10f;
+            TankHealthPerCardMax.Value = 10f;
 
             TankMovementSpeedPerCard.Value = 0f;
-            TankMovementSpeedPerCardMin.Value = -5f;
-            TankMovementSpeedPerCardMax.Value = 5f;
+            TankMovementSpeedPerCardMin.Value = -10f;
+            TankMovementSpeedPerCardMax.Value = 10f;
 
             TankJumpHeightPerCard.Value = 0f;
-            TankJumpHeightPerCardMin.Value = -5f;
-            TankJumpHeightPerCardMax.Value = 5f;
+            TankJumpHeightPerCardMin.Value = -10f;
+            TankJumpHeightPerCardMax.Value = 10f;
 
             // Healer Class
             HealerHealingPerCard.Value = 0f;
-            HealerHealingPerCardMin.Value = -5f;
-            HealerHealingPerCardMax.Value = 5f;
+            HealerHealingPerCardMin.Value = -10f;
+            HealerHealingPerCardMax.Value = 10f;
 
             HealerMovementSpeedPerCard.Value = 0f;
-            HealerMovementSpeedPerCardMin.Value = -5f;
-            HealerMovementSpeedPerCardMax.Value = 5f;
+            HealerMovementSpeedPerCardMin.Value = -10f;
+            HealerMovementSpeedPerCardMax.Value = 10f;
 
             // Attack Class
             AttackDamagePerCard.Value = 0f;
-            AttackDamagePerCardMin.Value = -5f;
-            AttackDamagePerCardMax.Value = 5f;
+            AttackDamagePerCardMin.Value = -10f;
+            AttackDamagePerCardMax.Value = 10f;
 
             AttackMovementSpeedPerCard.Value = 0f;
-            AttackMovementSpeedPerCardMin.Value = -5f;
-            AttackMovementSpeedPerCardMax.Value = 5f;
+            AttackMovementSpeedPerCardMin.Value = -10f;
+            AttackMovementSpeedPerCardMax.Value = 10f;
         }
     }
 }

@@ -13,6 +13,7 @@ using TeamComposition2.GameModes;
 using TeamComposition2.Patches;
 using TeamComposition2.GameModes.Physics;
 using TeamComposition2.CardRoles;
+using TeamComposition2.Stats;
 
 [BepInDependency("com.willis.rounds.unbound")]
 [BepInDependency("pykess.rounds.plugins.moddingutils")]
@@ -42,6 +43,9 @@ public class MyPlugin: BaseUnityPlugin{
 		// Initialize stat modifier settings for Point Control mode
 		TeamComposition2.GameModes.StatModifierSettings.Initialize(Config);
 
+		// Register stat modifier application hooks
+		TeamComposition2.GameModes.StatModifierApplicator.RegisterHooks();
+
 		// Initialize team spawn persistence patches
 		new Harmony("com.adamklein.teamcomposition.teamspawns").PatchAll(typeof(TeamSpawnAssignmentPatch));
 
@@ -51,6 +55,9 @@ public class MyPlugin: BaseUnityPlugin{
 		// Card role visual patches (text and icon indicators)
 		new Harmony("com.adamklein.teamcomposition.cardroletext").PatchAll(typeof(TeamComposition2.CardRoles.CardInfoAwakePatch));
 		new Harmony("com.adamklein.teamcomposition.cardroleicon").PatchAll(typeof(TeamComposition2.CardRoles.CardInfoIconAwakePatch));
+
+		// Healing effectiveness patches (for pure healing effects like Healing Field and Christmas Cheer)
+		new Harmony("com.adamklein.teamcomposition.healingeffectiveness").PatchAll(typeof(TeamComposition2.Patches.HealingEffectivenessPatches));
 
 		// Initialize bot manager and patches
 		TeamComposition2.Bots.BotManager.Initialize(Config, asset);
@@ -67,6 +74,9 @@ public class MyPlugin: BaseUnityPlugin{
 		// Register card role tracking hooks
 		GameModeManager.AddHook(GameModeHooks.HookGameStart, PlayerCardRolesExtension.ResetAllPlayerCardRoles);
 		GameModeManager.AddHook(GameModeHooks.HookPlayerPickEnd, PlayerCardRolesExtension.RecalculateAllPlayerCardRoles);
+
+		// Register healing effectiveness reset hook
+		GameModeManager.AddHook(GameModeHooks.HookGameStart, ResetHealingEffectiveness);
 	}
 	void Start(){
 		UnityEngine.Debug.Log("before load asset!");
@@ -89,8 +99,11 @@ public class MyPlugin: BaseUnityPlugin{
 		// Register bot menu and handlers
 		TeamComposition2.Bots.BotManager.RegisterMenuAndHandshake(Config, asset);
 
-		// Register Point Control settings menu (accessible mid-game)
+		// Register Point Control settings menu (main menu only)
 		TeamComposition2.GameModes.CrownControlMenu.RegisterMenu();
+
+		// Register in-game stat settings menu (pause menu only)
+		TeamComposition2.GameModes.InGameStatMenu.RegisterMenu();
 
 		UnityEngine.Debug.Log("after load asset!");
 	}
@@ -118,6 +131,12 @@ public class MyPlugin: BaseUnityPlugin{
 	private IEnumerator ApplyCardTogglesBeforePick(IGameModeHandler gm)
 	{
 		TeamComposition2.CardToggleManager.ApplyCardToggles();
+		yield break;
+	}
+
+	private IEnumerator ResetHealingEffectiveness(IGameModeHandler gm)
+	{
+		HealingEffectivenessExtension.ResetAllPlayerHealingEffectiveness();
 		yield break;
 	}
 	

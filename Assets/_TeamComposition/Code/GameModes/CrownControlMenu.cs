@@ -9,10 +9,13 @@ namespace TeamComposition2.GameModes
     public static class CrownControlMenu
     {
         private const string MenuName = "Point Control Settings";
+        private const float SliderMin = -10f;
+        private const float SliderMax = 10f;
 
         public static void RegisterMenu()
         {
-            Unbound.RegisterMenu(MenuName, () => { }, CreateMenu, null, true);
+            // Main menu only - pause menu uses InGameStatMenu for streamlined access
+            Unbound.RegisterMenu(MenuName, () => { }, CreateMenu, null, false);
         }
 
         private static void CreateMenu(GameObject menu)
@@ -45,6 +48,7 @@ namespace TeamComposition2.GameModes
             {
                 StatModifierSettings.ResetAllToDefaults();
                 GM_CrownControl.secondsNeededToWin = GM_CrownControl.defaultSecondsNeededToWin;
+                StatModifierApplicator.RefreshAllPlayerStats();
             }, 30);
         }
 
@@ -76,7 +80,7 @@ namespace TeamComposition2.GameModes
                 parentForMenu: mainMenu.transform.parent.gameObject);
 
             MenuHandler.CreateText("<b>Base Stat Modifiers", baseStatsMenu, out TextMeshProUGUI _, 60);
-            MenuHandler.CreateText("Applies to all players. 0 = no change, +5 = 5x, -5 = 1/5x", baseStatsMenu, out TextMeshProUGUI _, 25, false);
+            MenuHandler.CreateText("Applies to all players. 0 = no change, +10 = 25x, -10 = 1/25x", baseStatsMenu, out TextMeshProUGUI _, 25, false);
             AddBlank(baseStatsMenu, 30);
 
             // Movement Speed
@@ -103,6 +107,7 @@ namespace TeamComposition2.GameModes
                 StatModifierSettings.BaseMovementSpeed.Value = 0f;
                 StatModifierSettings.BaseJumpHeight.Value = 0f;
                 StatModifierSettings.BaseMaxHealth.Value = 0f;
+                StatModifierApplicator.RefreshAllPlayerStats();
             }, 30);
         }
 
@@ -140,14 +145,15 @@ namespace TeamComposition2.GameModes
             MenuHandler.CreateButton("Reset Tank Stats", tankMenu, () =>
             {
                 StatModifierSettings.TankHealthPerCard.Value = 0f;
-                StatModifierSettings.TankHealthPerCardMin.Value = -5f;
-                StatModifierSettings.TankHealthPerCardMax.Value = 5f;
+                StatModifierSettings.TankHealthPerCardMin.Value = SliderMin;
+                StatModifierSettings.TankHealthPerCardMax.Value = SliderMax;
                 StatModifierSettings.TankMovementSpeedPerCard.Value = 0f;
-                StatModifierSettings.TankMovementSpeedPerCardMin.Value = -5f;
-                StatModifierSettings.TankMovementSpeedPerCardMax.Value = 5f;
+                StatModifierSettings.TankMovementSpeedPerCardMin.Value = SliderMin;
+                StatModifierSettings.TankMovementSpeedPerCardMax.Value = SliderMax;
                 StatModifierSettings.TankJumpHeightPerCard.Value = 0f;
-                StatModifierSettings.TankJumpHeightPerCardMin.Value = -5f;
-                StatModifierSettings.TankJumpHeightPerCardMax.Value = 5f;
+                StatModifierSettings.TankJumpHeightPerCardMin.Value = SliderMin;
+                StatModifierSettings.TankJumpHeightPerCardMax.Value = SliderMax;
+                StatModifierApplicator.RefreshAllPlayerStats();
             }, 30);
         }
 
@@ -178,11 +184,12 @@ namespace TeamComposition2.GameModes
             MenuHandler.CreateButton("Reset Healer Stats", healerMenu, () =>
             {
                 StatModifierSettings.HealerHealingPerCard.Value = 0f;
-                StatModifierSettings.HealerHealingPerCardMin.Value = -5f;
-                StatModifierSettings.HealerHealingPerCardMax.Value = 5f;
+                StatModifierSettings.HealerHealingPerCardMin.Value = SliderMin;
+                StatModifierSettings.HealerHealingPerCardMax.Value = SliderMax;
                 StatModifierSettings.HealerMovementSpeedPerCard.Value = 0f;
-                StatModifierSettings.HealerMovementSpeedPerCardMin.Value = -5f;
-                StatModifierSettings.HealerMovementSpeedPerCardMax.Value = 5f;
+                StatModifierSettings.HealerMovementSpeedPerCardMin.Value = SliderMin;
+                StatModifierSettings.HealerMovementSpeedPerCardMax.Value = SliderMax;
+                StatModifierApplicator.RefreshAllPlayerStats();
             }, 30);
         }
 
@@ -213,16 +220,17 @@ namespace TeamComposition2.GameModes
             MenuHandler.CreateButton("Reset Attack Stats", attackMenu, () =>
             {
                 StatModifierSettings.AttackDamagePerCard.Value = 0f;
-                StatModifierSettings.AttackDamagePerCardMin.Value = -5f;
-                StatModifierSettings.AttackDamagePerCardMax.Value = 5f;
+                StatModifierSettings.AttackDamagePerCardMin.Value = SliderMin;
+                StatModifierSettings.AttackDamagePerCardMax.Value = SliderMax;
                 StatModifierSettings.AttackMovementSpeedPerCard.Value = 0f;
-                StatModifierSettings.AttackMovementSpeedPerCardMin.Value = -5f;
-                StatModifierSettings.AttackMovementSpeedPerCardMax.Value = 5f;
+                StatModifierSettings.AttackMovementSpeedPerCardMin.Value = SliderMin;
+                StatModifierSettings.AttackMovementSpeedPerCardMax.Value = SliderMax;
+                StatModifierApplicator.RefreshAllPlayerStats();
             }, 30);
         }
 
         /// <summary>
-        /// Creates a simple stat slider with range -5 to +5.
+        /// Creates a simple stat slider with range -10 to +10.
         /// </summary>
         private static void CreateStatSlider(GameObject menu, string label, float currentValue, System.Action<float> onValueChanged)
         {
@@ -230,10 +238,10 @@ namespace TeamComposition2.GameModes
                 label,
                 menu,
                 30,
-                -5f,
-                5f,
+                SliderMin,
+                SliderMax,
                 currentValue,
-                value => onValueChanged(value),
+                value => UpdateStatAndRefresh(() => onValueChanged(value)),
                 out Slider _
             );
         }
@@ -256,10 +264,10 @@ namespace TeamComposition2.GameModes
                 "Value",
                 menu,
                 30,
-                -5f,
-                5f,
+                SliderMin,
+                SliderMax,
                 valueConfig.Value,
-                value => valueConfig.Value = value,
+                value => UpdateStatAndRefresh(() => valueConfig.Value = value),
                 out Slider _
             );
             AddBlank(menu, 10);
@@ -269,10 +277,10 @@ namespace TeamComposition2.GameModes
                 "Minimum",
                 menu,
                 30,
-                -5f,
-                5f,
+                SliderMin,
+                SliderMax,
                 minConfig.Value,
-                value => minConfig.Value = value,
+                value => UpdateStatAndRefresh(() => minConfig.Value = value),
                 out Slider _
             );
             AddBlank(menu, 10);
@@ -282,10 +290,10 @@ namespace TeamComposition2.GameModes
                 "Maximum",
                 menu,
                 30,
-                -5f,
-                5f,
+                SliderMin,
+                SliderMax,
                 maxConfig.Value,
-                value => maxConfig.Value = value,
+                value => UpdateStatAndRefresh(() => maxConfig.Value = value),
                 out Slider _
             );
         }
@@ -293,6 +301,12 @@ namespace TeamComposition2.GameModes
         private static void AddBlank(GameObject menu, int size = 30)
         {
             MenuHandler.CreateText(" ", menu, out TextMeshProUGUI _, size);
+        }
+
+        private static void UpdateStatAndRefresh(System.Action applyChange)
+        {
+            applyChange?.Invoke();
+            StatModifierApplicator.RefreshAllPlayerStats();
         }
     }
 }

@@ -160,7 +160,9 @@ namespace TeamComposition2
                     // friendly fire
                     else if (hitPlayer.playerID != __instance.ownPlayer.playerID && hitPlayer.teamID == __instance.ownPlayer.teamID && FriendlyFireManager.disableFriendlyFire)
                     {
-                        return false;
+                        // Allow the hit to proceed so healing/on-hit effects can still fire.
+                        // RPCA_DoHit will short-circuit damage for friendly targets.
+                        return true;
                     }
                 }
             }
@@ -176,12 +178,6 @@ namespace TeamComposition2
         [HarmonyBefore("pykess.rounds.plugins.moddingutils")]
         private static bool Prefix(ProjectileHit __instance, Vector2 hitPoint, Vector2 hitNormal, Vector2 vel, int viewID, int colliderID, bool wasBlocked)
         {
-            // if disableHitEffects is true, then ProjectileHit.Hit has already handled all of this
-            if (FriendlyFireManager.disableHitEffects)
-            {
-                return true;
-            }
-
             if (__instance.ownPlayer != null)
             {
                 // get the thing the bullet hit
@@ -200,32 +196,63 @@ namespace TeamComposition2
                     hitInfo.collider = MapManager.instance.currentMap.Map.GetComponentsInChildren<Collider2D>()[colliderID];
                     hitInfo.transform = hitInfo.collider.transform;
                 }
-                HealthHandler healthHandler = null;
-                if (hitInfo.transform)
-                {
-                    healthHandler = hitInfo.transform.GetComponent<HealthHandler>();
-                }
-                if (healthHandler != null)
-                {
-                    Player hitPlayer = healthHandler.gameObject.GetComponent<Player>();
+                Player hitPlayer = hitInfo.transform ? hitInfo.transform.GetComponent<Player>() : null;
 
-                    // if the hit player is not null
-                    if (hitPlayer != null)
-                    {
-                        // self-damage
-                        if (hitPlayer.playerID == __instance.ownPlayer.playerID && FriendlyFireManager.disableSelfDamage)
-                        {
-                            return false;
-                        }
-                        // friendly fire
-                        else if (hitPlayer.playerID != __instance.ownPlayer.playerID && hitPlayer.teamID == __instance.ownPlayer.teamID && FriendlyFireManager.disableFriendlyFire)
-                        {
-                            return false;
-                        }
-                    }
+                // Keep self-damage blocking unchanged.
+                if (hitPlayer != null && hitPlayer.playerID == __instance.ownPlayer.playerID && FriendlyFireManager.disableSelfDamage)
+                {
+                    return false;
+                }
+
+                // For friendly hits, skip damage/force but still execute on-hit effects so healing can apply.
+                if (hitPlayer != null && hitPlayer.playerID != __instance.ownPlayer.playerID && hitPlayer.teamID == __instance.ownPlayer.teamID && FriendlyFireManager.disableFriendlyFire)
+                {
+                    bool runVisuals = !FriendlyFireManager.disableHitEffects;
+                    HandleFriendlyHitEffects(__instance, hitInfo, runVisuals);
+                    return false;
                 }
             }
             return true;
+        }
+
+        /// <summary>
+        /// Runs projectile hit effects for friendly targets without applying damage or force.
+        /// This lets healing/on-hit logic execute even when friendly fire is disabled.
+        /// </summary>
+        private static void HandleFriendlyHitEffects(ProjectileHit projectile, HitInfo hitInfo, bool runVisuals)
+        {
+            // Run RayHitEffects (these often contain healing/utility logic)
+            bool shouldDestroy = true;
+            if (projectile.effects != null)
+            {
+                for (int i = 0; i < projectile.effects.Count; i++)
+                {
+                    var result = projectile.effects[i].DoHitEffect(hitInfo);
+                    if (result == HasToReturn.hasToReturn)
+                    {
+                        shouldDestroy = false;
+                    }
+                    else if (result == HasToReturn.hasToReturnNow)
+                    {
+                        return;
+                    }
+                }
+            }
+
+            // Optionally move the projectile to the hit point and play visuals
+            if (runVisuals && projectile.isAllowedToSpawnObjects)
+            {
+                projectile.transform.position = hitInfo.point;
+                // Minimal visual feedback; we deliberately skip spawning additional objects to avoid side-effects.
+                DynamicParticles.instance?.PlayBulletHit(projectile.damage, projectile.transform, hitInfo, projectile.projectileColor);
+                projectile.transform.position = hitInfo.point + hitInfo.normal * 0.01f;
+            }
+
+            if (shouldDestroy)
+            {
+                projectile.deathEvent?.Invoke();
+                projectile.InvokeMethod("DestroyMe");
+            }
         }
     }
 

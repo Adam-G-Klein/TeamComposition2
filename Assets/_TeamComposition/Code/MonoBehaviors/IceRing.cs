@@ -1,6 +1,7 @@
 using System;
 using Sonigon;
 using Sonigon.Internal;
+using TeamComposition2.Stats;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -27,7 +28,9 @@ public class IceRing : MonoBehaviour
                     if (flag || flag2)
                     {
                         CharacterData component = array[i].gameObject.GetComponent<CharacterData>();
-                        array[i].gameObject.GetComponent<HealthHandler>().Heal(1f + component.maxHealth * 0.1f);
+                        float baseHeal = 1f + component.maxHealth * 0.1f;
+                        float healMultiplier = this.player != null ? this.player.GetHealingDealtMultiplier() : 1f;
+                        array[i].gameObject.GetComponent<HealthHandler>().Heal(baseHeal * healMultiplier);
                     }
                     else
                     {

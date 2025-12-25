@@ -4,6 +4,55 @@ using System.Reflection;
 using System.Reflection.Emit;
 using UnityEngine;
 
+namespace TeamComposition2
+{
+    /// <summary>
+    /// Tracks active healing fields and their owning team for AI navigation.
+    /// </summary>
+    public class HealingFieldTeamMarker : MonoBehaviour
+    {
+        private static readonly System.Collections.Generic.HashSet<HealingFieldTeamMarker> ActiveMarkers = new System.Collections.Generic.HashSet<HealingFieldTeamMarker>();
+
+        public Player Owner { get; private set; }
+        public int TeamId { get; private set; } = -1;
+
+        public void Initialize(Player owner)
+        {
+            Owner = owner;
+            TeamId = owner ? owner.teamID : -1;
+        }
+
+        private void OnEnable() => ActiveMarkers.Add(this);
+
+        private void OnDisable() => ActiveMarkers.Remove(this);
+
+        private void OnDestroy() => ActiveMarkers.Remove(this);
+
+        public static HealingFieldTeamMarker FindClosestForTeam(int teamId, Vector3 fromPosition, out float distance)
+        {
+            HealingFieldTeamMarker closest = null;
+            distance = float.MaxValue;
+
+            foreach (var marker in ActiveMarkers)
+            {
+                if (marker == null || !marker.isActiveAndEnabled || marker.TeamId != teamId)
+                {
+                    continue;
+                }
+
+                float d = Vector2.Distance(fromPosition, marker.transform.position);
+                if (d < distance)
+                {
+                    distance = d;
+                    closest = marker;
+                }
+            }
+
+            return closest;
+        }
+    }
+}
+
 namespace TeamComposition2.Bots.Patches
 {
     [HarmonyPatch(typeof(PlayerAIPhilip))]
@@ -56,6 +105,8 @@ namespace TeamComposition2.Bots.Patches
                     break;
                 }
             }
+
+            TrySeekFriendlyHealingField(__instance);
         }
 
         [HarmonyTranspiler]
@@ -93,6 +144,36 @@ namespace TeamComposition2.Bots.Patches
                     yield return code;
                 }
             }
+        }
+
+        private static void TrySeekFriendlyHealingField(PlayerAIPhilip ai)
+        {
+            var player = ai.GetComponentInParent<Player>();
+            var api = player ? player.GetComponent<PlayerAPI>() : null;
+            if (player == null || api == null)
+            {
+                return;
+            }
+
+            float distance;
+            var marker = HealingFieldTeamMarker.FindClosestForTeam(player.teamID, player.transform.position, out distance);
+            if (marker == null)
+            {
+                return;
+            }
+
+            // Move toward the friendly healing field; stay put when close enough to benefit.
+            Vector2 moveDirection = (Vector2)(marker.transform.position - player.transform.position);
+            if (distance > 0.25f)
+            {
+                moveDirection.Normalize();
+            }
+            else
+            {
+                moveDirection = Vector2.zero;
+            }
+
+            api.Move(moveDirection);
         }
     }
 }

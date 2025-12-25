@@ -25,9 +25,9 @@ namespace TeamComposition2.CardRoles
             { "Huge", CardRole.Tank },
             { "Shields up", CardRole.Tank },
             { "Shield Charge", CardRole.Tank },
-            { "Tank", CardRole.Tank },
-            */
             { "Pristine Perserverance", CardRole.Tank },
+            */
+            { "Tank", CardRole.Tank },
 
             // ============================================
             // ATK CARDS - Offensive/damage focused
@@ -71,20 +71,28 @@ namespace TeamComposition2.CardRoles
             { "Steady shot", CardRole.Atk },
 
             // ============================================
-            // HEAL CARDS - Healing/regeneration focused
+            // HEAL CARDS - Pure healing effects
+            // These cards provide "true healing" that benefits from HealingDealtMultiplier.
+            // This is SEPARATE from lifesteal/regen which are not affected by the heal stat.
+            // ============================================
+            { "Healing Field", CardRole.Heal },   // Pure healing - AOE heal field
+            { "Christmas Cheer", CardRole.Heal }, // Pure healing - heals nearby allies via IceRing
+            { "Phoenix", CardRole.Heal },
+
+            // ============================================
+            // LIFESTEAL CARDS - NOT pure healing, do NOT benefit from heal stat
+            // These cards use CharacterStatModifiers.lifeSteal which is separate from HealingDealtMultiplier.
+            // Uncomment and set to a different role (e.g., Atk or None) if needed.
             // ============================================
             /*
-            { "Leech", CardRole.Heal },
-            { "Life stealer", CardRole.Heal },
-            { "Parasite", CardRole.Heal },
-            { "Taste of blood", CardRole.Heal },
-            { "Radiance", CardRole.Heal },
-            { "Refresh", CardRole.Heal },
-            { "Christmas Cheer", CardRole.Heal },
-            { "Scavenger", CardRole.Heal },
+            { "Leech", CardRole.Atk },         // Lifesteal-based, not pure healing
+            { "Life stealer", CardRole.Atk },  // Lifesteal-based, not pure healing
+            { "Parasite", CardRole.Atk },      // Lifesteal-based, not pure healing
+            { "Taste of blood", CardRole.Atk }, // Lifesteal-based, not pure healing
+            { "Radiance", CardRole.None },     // Regen-based, not pure healing
+            { "Refresh", CardRole.None },      // Regen-based, not pure healing
+            { "Scavenger", CardRole.None },    // Pickup-based, not pure healing
             */
-            { "Healing Field", CardRole.Heal },
-            { "Phoenix", CardRole.Heal },
 
             // ============================================
             // ADDITIONAL ATK CARDS

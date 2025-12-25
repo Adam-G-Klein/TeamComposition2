@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using TeamComposition2.Bots.UI;
 using TeamComposition2.Bots.Utils;
+using TeamComposition2.Patches;
 using UnboundLib;
 using UnboundLib.Networking;
 using UnboundLib.Utils;
@@ -40,6 +41,7 @@ namespace TeamComposition2.Bots
             harmony.PatchAll(typeof(Patches.CharacterSelectionInstancePatch));
             harmony.PatchAll(typeof(Patches.KeybindHintsPatch));
             harmony.PatchAll(typeof(Patches.RWFAddSpotToPlayerPatch));
+            harmony.PatchAll(typeof(HealingFieldTaggerPatch));
         }
 
         public static void RegisterMenuAndHandshake(ConfigFile config, AssetBundle assets = null)
